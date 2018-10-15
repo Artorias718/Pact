@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: au.com.dius:pact-jvm-matchers_2.12:3.5.16">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/au/com/dius/pact-jvm-matchers_2.12/3.5.16/pact-jvm-matchers_2.12-3.5.16.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/au/com/dius/pact-jvm-matchers_2.12/3.5.16/pact-jvm-matchers_2.12-3.5.16-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/au/com/dius/pact-jvm-matchers_2.12/3.5.16/pact-jvm-matchers_2.12-3.5.16-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
