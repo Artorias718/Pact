@@ -11,9 +11,9 @@ These instructions will get you a copy of the project up and running on your loc
 If you haven't got Docker Compose installed,
     [follow these installation instructions](https://docs.docker.com/compose/install/).
 
-    The container runs in the background and incrementally rebuilds the site each
-    time a file changes. The container runs in the foreground, but
-    you can use `CTRL+C` to get the command prompt back.
+The container runs in the background and incrementally rebuilds the site each
+time a file changes. The container runs in the foreground, but
+you can use `CTRL+C` to get the command prompt back.
 
 ### Installing
 
