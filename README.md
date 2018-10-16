@@ -29,11 +29,7 @@ you can use `CTRL+C` to get the command prompt back.
        ```bash
        docker run -it -p 5000:5000 -e DOMAIN=http://localhost:8080/entando entando/appbuilder:5.0.1-SNAPSHOT
        ```
-    c. Set this webdriver JVM parameter, then you can just run the tests from your IDE.
+    c. Set this `Dwebdriver.chrome.driver=/home/ampie/chromedriver` as webdriver JVM parameter, then you can just run the tests        from your IDE.
         
-       ```bash
-       Dwebdriver.chrome.driver=/home/ampie/chromedriver
-
-       ```
-### Break down into end to end tests
-
+       
+       
