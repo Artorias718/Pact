@@ -24,6 +24,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -95,10 +96,14 @@ public class LabelsAndLanguagesConsumerTest extends UsersTestBase {
         String languageName = "zh – Chinese - Traditional";
         dTLabelsAndLanguagesPage.getLanguageSelect().selectByVisibleText(languageName);
         dTLabelsAndLanguagesPage.getAddButton().click();
+        sleep(600);
         WebElement button = dTLabelsAndLanguagesPage.getSimpleTable().getButtonOnTable(
                 "Chinese - Traditional", "Name", "Actions");
         button.click();
-        sleep(1000);
+        Utils.waitUntilIsVisible(driver, dTLabelsAndLanguagesPage.getDeleteModalButton());
+        Utils.waitUntilIsClickable(driver, dTLabelsAndLanguagesPage.getDeleteModalButton());
         dTLabelsAndLanguagesPage.getDeleteModalButton().click();
+        Utils.waitUntilIsDisappears(driver, dTLabelsAndLanguagesPage.modalWindowTag);
+
     }
 }

@@ -81,7 +81,7 @@ public class UserGroupDetailsConsumerTest extends UsersTestBase {
         return getGroupToPut.toPact();
     }
 
-    public static PactDslResponse buildGetGroups(PactDslResponse builder, String sort, int page, int pageSize) {
+    private PactDslResponse buildGetGroups(PactDslResponse builder, String sort, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/groups")
                 .method("OPTIONS")
@@ -100,7 +100,7 @@ public class UserGroupDetailsConsumerTest extends UsersTestBase {
         return standardResponse(request, json);
     }
 
-    public static PactDslResponse buildGetGroupToPut(PactDslResponse builder) {
+    private PactDslResponse buildGetGroupToPut(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Group Query OPTIONS Interaction")
                 .path("/entando/api/groups/unimportant")
                 .method("OPTIONS")
@@ -113,7 +113,7 @@ public class UserGroupDetailsConsumerTest extends UsersTestBase {
         return standardResponse(request, json);
     }
 
-    public static PactDslResponse buildGetGroupDetails(PactDslWithProvider builder) {
+    private PactDslResponse buildGetGroupDetails(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Group Query OPTIONS Interaction")
                 .path("/entando/api/groups/unimportant/references/PageManager")
                 .method("OPTIONS")

@@ -23,6 +23,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -82,7 +83,7 @@ public class DataTypesAddConsumerTest extends UsersTestBase {
         return getDataTypesStatus.toPact();
     }
 
-    public static PactDslResponse buildPostDataTypes(PactDslWithProvider builder) {
+    private PactDslResponse buildPostDataTypes(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Types post OPTIONS Interaction")
                 .path("/entando/api/dataTypes")
                 .method("OPTIONS")
@@ -95,7 +96,7 @@ public class DataTypesAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"code\":\"PCT\",\"name\":\"pactDataType\",\"status\":\"0\",\"attributes\":[],\"viewPage\":null,\"listModel\":null,\"defaultModel\":null},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetDataTypesStatus(PactDslResponse builder) {
+    private PactDslResponse buildGetDataTypesStatus(PactDslResponse builder) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Data Types Status GET Interaction")
                 .path("/entando/api/dataTypesStatus")
@@ -103,7 +104,7 @@ public class DataTypesAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"ready\":[\"AAA\",\"SLN\",\"SLM\",\"SLL\"],\"toRefresh\":[],\"refreshing\":[]},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetDataTypesAttributes(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetDataTypesAttributes(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Types attribues get OPTIONS Interaction")
                 .path("/entando/api/dataTypeAttributes")
                 .method("OPTIONS")
@@ -120,7 +121,7 @@ public class DataTypesAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[\"Boolean\",\"CheckBox\",\"Composite\",\"Date\",\"Enumerator\",\"EnumeratorMap\",\"Hypertext\",\"List\",\"Longtext\",\"Monolist\",\"Monotext\",\"Number\",\"Text\",\"ThreeState\",\"Timestamp\"],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":100,\"lastPage\":1,\"totalItems\":15,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildGetDataTypesToPut(PactDslResponse builder) {
+    private PactDslResponse buildGetDataTypesToPut(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Type get OPTIONS Interaction")
                 .path("/entando/api/dataTypes/PCT")
                 .method("OPTIONS")
@@ -133,7 +134,7 @@ public class DataTypesAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"code\":\"PCT\",\"name\":\"pactDataType\",\"status\":\"0\",\"attributes\":[],\"viewPage\":null,\"listModel\":null,\"defaultModel\":null},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildPutDataTypes(PactDslResponse builder) {
+    private PactDslResponse buildPutDataTypes(PactDslResponse builder) {
 
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Data Type PUT Interaction")
@@ -142,7 +143,7 @@ public class DataTypesAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"code\":\"PCT\",\"name\":\"pactDataType\",\"status\":\"0\",\"attributes\":[],\"viewPage\":null,\"listModel\":null,\"defaultModel\":null},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetDataTypes(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetDataTypes(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Data Types GET Interaction")
                 .path("/entando/api/dataTypes")
@@ -156,8 +157,10 @@ public class DataTypesAddConsumerTest extends UsersTestBase {
     public void runTest() throws InterruptedException {
 
         dTDataTypesPage.getNewButton().click();
+        Utils.waitUntilIsVisible(driver, dTDataTypesAddPage.getSaveButton());
         dTDataTypesAddPage.setCode("PCT");
         dTDataTypesAddPage.setName("pactDataType");
+        Utils.waitUntilIsVisible(driver,dTDataTypesAddPage.getSaveButton());
         dTDataTypesAddPage.getSaveButton().click();
         sleep(1000);
         dTDataTypesAddPage.getSaveButton().click();

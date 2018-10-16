@@ -46,24 +46,6 @@ public class UserProfileTypeAddConsumerTest extends UsersTestBase {
     public DTDashboardPage dTDashboardPage;
 
     @Autowired
-    public DTUsersPage dTUsersPage;
-
-    @Autowired
-    public DTUserAddPage dTUserAddPage;
-
-    @Autowired
-    public DTUserProfileTypePage dtUserProfileTypePage;
-
-    @Autowired
-    public DTUserRolesPage dtUserRolesPage;
-
-    @Autowired
-    public DTUserProfileTypeAddPage dtUserProfileTypeAddPage;
-
-    @Autowired
-    public DTUserRolesPage dTUserRolesPage;
-
-    @Autowired
     public DTUserProfileTypePage dTUserProfileTypePage;
 
     @Autowired
@@ -92,7 +74,7 @@ public class UserProfileTypeAddConsumerTest extends UsersTestBase {
             login();
             //Navigation to the page
             dTDashboardPage.SelectSecondOrderLinkWithSleep("User Management", "Profile types");
-            Utils.waitUntilIsVisible(driver, dtUserProfileTypePage.getAddButton());
+            Utils.waitUntilIsVisible(driver, dTUserProfileTypePage.getAddButton());
         });
     }
 

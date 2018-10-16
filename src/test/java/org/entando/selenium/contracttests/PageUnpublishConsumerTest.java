@@ -25,6 +25,7 @@ import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.PageTreeTestBase;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -114,9 +115,11 @@ public class PageUnpublishConsumerTest extends UsersTestBase {
 
         Kebab kebab = dTPageTreePage.getTable().getKebabOnTable("pagina5",
                 "Page tree", "Actions");
-
         kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Unpublish").click();
+        Utils.waitUntilIsVisible(driver, dTPageTreePage.getUnpublishModalButton());
         dTPageTreePage.getUnpublishModalButton().click();
+        Utils.waitUntilIsDisappears(driver, DTPageTreePage.getModalWindowTag());
     }
 }

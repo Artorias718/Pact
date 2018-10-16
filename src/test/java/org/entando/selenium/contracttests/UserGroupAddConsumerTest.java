@@ -81,7 +81,7 @@ public class UserGroupAddConsumerTest extends UsersTestBase {
         return getGroupResponse.toPact();
     }
 
-    public static PactDslResponse buildGetGroups(PactDslResponse builder, String sort, int page, int pageSize) {
+    private PactDslResponse buildGetGroups(PactDslResponse builder, String sort, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/groups")
                 .method("OPTIONS")
@@ -100,7 +100,7 @@ public class UserGroupAddConsumerTest extends UsersTestBase {
         return standardResponse(request, json);
     }
 
-    public static PactDslResponse buildGetGroups2(PactDslResponse builder, String sort, int page, int pageSize) {
+    private PactDslResponse buildGetGroups2(PactDslResponse builder, String sort, int page, int pageSize) {
         PactDslRequestWithPath  request = builder.uponReceiving("The Groups GET Interaction")
                 .path("/entando/api/groups")
                 .method("GET")
@@ -111,7 +111,7 @@ public class UserGroupAddConsumerTest extends UsersTestBase {
         return standardResponse(request, json);
     }
 
-    public static PactDslResponse buildPostGroup(PactDslWithProvider builder) {
+    private PactDslResponse buildPostGroup(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/groups")
                 .method("OPTIONS").headers("Access-control-request-method", "POST")

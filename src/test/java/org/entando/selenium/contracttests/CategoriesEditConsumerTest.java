@@ -80,7 +80,7 @@ public class CategoriesEditConsumerTest extends UsersTestBase {
         return getLanguagesResponse.toPact();
     }
 
-    public static PactDslResponse buildEditCategories(PactDslWithProvider builder) {
+    private PactDslResponse buildEditCategories(PactDslWithProvider builder) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Categories PUT Interaction")
                 .path("/entando/api/categories/category3")
@@ -88,7 +88,7 @@ public class CategoriesEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{}");
     }
 
-    public static PactDslResponse buildGetCategoryToPut(PactDslResponse builder) {
+    private PactDslResponse buildGetCategoryToPut(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Category OPTIONS Interaction")
                 .path("/entando/api/categories/category3")
                 .method("OPTIONS")
@@ -101,7 +101,7 @@ public class CategoriesEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"code\":\"category3\",\"parentCode\":\"home\",\"titles\":{\"en\":\"Category3\",\"it\":\"Category3\"},\"fullTitles\":{\"en\":\"All / Category3\",\"it\":\"Generale / Category3\"},\"children\":[\"testcategory31\"],\"references\":{}},\"errors\":[],\"metaData\":{\"parentCode\":\"home\"}}");
     }
 
-    public static PactDslResponse buildGetLanguages(PactDslResponse builder) {
+    private PactDslResponse buildGetLanguages(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Languages get OPTIONS Interaction")
                 .path("/entando/api/languages")
                 .method("OPTIONS")

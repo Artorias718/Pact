@@ -24,6 +24,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.ExpandableTable;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
@@ -48,6 +49,9 @@ public class PageCloneConsumerTest extends UsersTestBase {
 
     @Autowired
     public DTPageAddPage dTPageAddPage;
+
+    @Autowired
+    public DTPageClonePage dTPageClonePage;
 
     @BeforeAll
     public void setupSessionAndNavigateToUserManagement (){
@@ -167,12 +171,15 @@ public class PageCloneConsumerTest extends UsersTestBase {
          Kebab kebab = dTPageTreePage.getTable().getKebabOnTable("pagina4",
                 "Page tree", "Actions");
         kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Clone").click();
+        Utils.waitUntilIsVisible(driver, dTPageClonePage.getSaveAndConfigureButton());
         dTPageAddPage.setEnTitleField("PCT");
         dTPageAddPage.setItTitleField("PCT");
         ExpandableTable table = dTPageAddPage.getTable();
         WebElement row = table.findRowList("Home", "Page tree").get(0);
         row.click();
         dTPageAddPage.getSaveButton().click();
+        Utils.waitUntilIsVisible(driver, dTPageTreePage.getSearchButton());
     }
 }

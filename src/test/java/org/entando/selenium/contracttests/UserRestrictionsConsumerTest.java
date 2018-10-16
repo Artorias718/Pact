@@ -77,7 +77,7 @@ public class UserRestrictionsConsumerTest extends UsersTestBase {
         return putUserRestrictionsResponse.toPact();
     }
 
-    public static PactDslResponse buildPutUserRestrictions(PactDslWithProvider builder) {
+    private PactDslResponse buildPutUserRestrictions(PactDslWithProvider builder) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The user restrictions PUT Interaction")
                 .path("/entando/api/userSettings")
@@ -85,7 +85,7 @@ public class UserRestrictionsConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"passwordAlwaysActive\":true,\"restrictionsActive\":false,\"enableGravatarIntegration\":false,\"lastAccessPasswordExpirationMonths\":0,\"maxMonthsPasswordValid\":0},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetUserRestrictions(PactDslResponse builder) {
+    private PactDslResponse buildGetUserRestrictions(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The user restrictions OPTIONS Interaction")
                 .path("/entando/api/userSettings")
                 .method("OPTIONS")

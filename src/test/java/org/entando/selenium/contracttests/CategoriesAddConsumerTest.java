@@ -79,7 +79,7 @@ public class CategoriesAddConsumerTest extends UsersTestBase {
         return postCategoriesResponse.toPact();
     }
 
-    public static PactDslResponse buildGetCategories(PactDslWithProvider builder) {
+    private PactDslResponse buildGetCategories(PactDslWithProvider builder) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Categories GET Interaction")
                 .path("/entando/api/categories/home")
@@ -87,7 +87,7 @@ public class CategoriesAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"code\":\"home\",\"parentCode\":\"home\",\"titles\":{\"en\":\"All\",\"it\":\"Generale\"},\"fullTitles\":{\"en\":\"All\",\"it\":\"Generale\"},\"children\":[\"category3\",\"categorytest\",\"categorytest00\",\"categorytest2\",\"jpcollaboration_categoryRoot\",\"jptagcloud_categoryRoot\",\"seleniumtest_donttouch\"],\"references\":{\"jpcollaborationIdeaManager\":false,\"DataObjectManager\":false,\"jacmsResourceManager\":false,\"jacmsContentManager\":false}},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetCategoriesParentCode(PactDslResponse builder, String parentCode) {
+    private PactDslResponse buildGetCategoriesParentCode(PactDslResponse builder, String parentCode) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Categories parentCode GET Interaction")
                 .path("/entando/api/categories")
@@ -96,7 +96,7 @@ public class CategoriesAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"code\":\"category3\",\"parentCode\":\"home\",\"titles\":{\"en\":\"Category3\",\"it\":\"Category3\"},\"fullTitles\":{\"en\":\"All / Category3\",\"it\":\"Generale / Category3\"},\"children\":[\"testcategory31\"],\"references\":{}},{\"code\":\"categorytest\",\"parentCode\":\"home\",\"titles\":{\"en\":\"CategoryTest\",\"it\":\"CategoryTest\"},\"fullTitles\":{\"en\":\"All / CategoryTest\",\"it\":\"Generale / CategoryTest\"},\"children\":[\"category_se\",\"category_se1\"],\"references\":{}},{\"code\":\"categorytest00\",\"parentCode\":\"home\",\"titles\":{\"en\":\"CategoryTest00\",\"it\":\"CategoryTest00\"},\"fullTitles\":{\"en\":\"All / CategoryTest00\",\"it\":\"Generale / CategoryTest00\"},\"children\":[],\"references\":{}},{\"code\":\"categorytest2\",\"parentCode\":\"home\",\"titles\":{\"en\":\"CategoryTest2\",\"it\":\"CategoryTest2\"},\"fullTitles\":{\"en\":\"All / CategoryTest2\",\"it\":\"Generale / CategoryTest2\"},\"children\":[],\"references\":{}},{\"code\":\"jpcollaboration_categoryRoot\",\"parentCode\":\"home\",\"titles\":{\"en\":\"Crowd Sourcing Root\",\"it\":\"Crowd Sourcing Root\"},\"fullTitles\":{\"en\":\"All / Crowd Sourcing Root\",\"it\":\"Generale / Crowd Sourcing Root\"},\"children\":[],\"references\":{}},{\"code\":\"jptagcloud_categoryRoot\",\"parentCode\":\"home\",\"titles\":{\"en\":\"Tag Cloud Root\",\"it\":\"Tag Cloud Root\"},\"fullTitles\":{\"en\":\"All / Tag Cloud Root\",\"it\":\"Generale / Tag Cloud Root\"},\"children\":[],\"references\":{}},{\"code\":\"seleniumtest_donttouch\",\"parentCode\":\"home\",\"titles\":{\"en\":\"SeleniumTest_DontTouch\",\"it\":\"SeleniumTest_DontTouch\"},\"fullTitles\":{\"en\":\"All / SeleniumTest_DontTouch\",\"it\":\"Generale / SeleniumTest_DontTouch\"},\"children\":[],\"references\":{}}],\"errors\":[],\"metaData\":{\"parentCode\":\"home\"}}");
     }
 
-    public static PactDslResponse buildGetLanguages(PactDslResponse builder) {
+    private PactDslResponse buildGetLanguages(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The get Languages OPTIONS Interaction")
                 .path("/entando/api/languages")
                 .method("OPTIONS")
@@ -119,7 +119,7 @@ public class CategoriesAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{}");
     }
 
-    public static PactDslResponse buildPostCategories(PactDslResponse builder) {
+    private PactDslResponse buildPostCategories(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The post Categories OPTIONS Interaction")
                 .path("/entando/api/categories")
                 .method("OPTIONS")

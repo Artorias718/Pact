@@ -24,6 +24,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -122,5 +123,6 @@ public class PageSearchConsumerTest extends UsersTestBase {
 
         dTPageTreePage.setSearchField("pagina4");
         dTPageTreePage.getSearchButton().click();
+        Utils.waitUntilIsVisible(driver, dTPageTreePage.getClearResultButton());
     }
 }

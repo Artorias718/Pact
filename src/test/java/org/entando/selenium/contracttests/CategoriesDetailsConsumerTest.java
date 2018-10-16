@@ -74,7 +74,7 @@ public class CategoriesDetailsConsumerTest extends UsersTestBase {
         return getCategoriesDetailsResponse.toPact();
     }
 
-    public static PactDslResponse buildGetCategoriesDetails(PactDslWithProvider builder) {
+    private PactDslResponse buildGetCategoriesDetails(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Categories get details OPTIONS Interaction")
                 .path("/entando/api/categories/category3")
                 .method("OPTIONS")

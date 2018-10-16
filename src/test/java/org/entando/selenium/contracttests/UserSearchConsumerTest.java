@@ -85,7 +85,7 @@ public class UserSearchConsumerTest extends UsersTestBase {
         return getSearchUsersResponse.toPact();
     }
 
-    public static PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath request = builder.uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/users")
                 .method("GET")
@@ -94,7 +94,7 @@ public class UserSearchConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-08-31 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":1,\"totalItems\":1,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildSearchUsers(PactDslWithProvider builder, String sort, String direction, int page, int pageSize  ) {
+    private PactDslResponse buildSearchUsers(PactDslWithProvider builder, String sort, String direction, int page, int pageSize  ) {
         PactDslRequestWithPath request = builder.uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/users")
                 .method("OPTIONS")
@@ -108,7 +108,7 @@ public class UserSearchConsumerTest extends UsersTestBase {
         return standardResponse(request, "{}");
     }
 
-    public static PactDslResponse buildSearchUsers(PactDslResponse builder, String sort, String direction, int page, int pageSize  ) {
+    private PactDslResponse buildSearchUsers(PactDslResponse builder, String sort, String direction, int page, int pageSize  ) {
         PactDslRequestWithPath request = builder
                 .uponReceiving("The User Add POST Interaction")
                 .path("/entando/api/users/")
@@ -124,7 +124,7 @@ public class UserSearchConsumerTest extends UsersTestBase {
     }
 
     @Test
-    public void runTest() throws InterruptedException {
+     public void runTest() throws InterruptedException {
 
         dTUsersPage.getSearchField().sendKeys("UNIMPORTANT");
         dTUsersPage.getSearchButton().click();

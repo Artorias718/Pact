@@ -79,7 +79,7 @@ public class UserRoleDeleteConsumerTest extends UsersTestBase {
         return deleteRoleResponse.toPact();
     }
 
-    public static PactDslResponse buildGetRoles(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetRoles(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/roles")
                 .method("OPTIONS")

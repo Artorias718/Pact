@@ -24,6 +24,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -94,7 +95,10 @@ public class PageModelsDeleteConsumerTest extends UsersTestBase {
         Kebab kebab = dTPageModelsPage.getTable().getKebabOnTable("PCT",
                 "Code", "Actions");
         kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Delete").click();
+        Utils.waitUntilIsVisible(driver, dTPageModelsPage.getDeleteModalButton());
         dTPageModelsPage.getDeleteModalButton().click();
+        Utils.waitUntilIsDisappears(driver, DTPageModelsPage.modalWindowTag);
     }
 }

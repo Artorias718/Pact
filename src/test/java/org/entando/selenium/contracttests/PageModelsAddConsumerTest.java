@@ -24,6 +24,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -108,6 +109,7 @@ public class PageModelsAddConsumerTest extends UsersTestBase {
     public void runTest() throws InterruptedException {
 
         dTPageModelsPage.getAddButton().click();
+        Utils.waitUntilIsVisible(driver, dTPageModelsAddPage.getSaveButton());
         dTPageModelsAddPage.setCodeField("PCT");
         dTPageModelsAddPage.setNameField("PCT");
         dTPageModelsAddPage.clearJsonConfigurationField();

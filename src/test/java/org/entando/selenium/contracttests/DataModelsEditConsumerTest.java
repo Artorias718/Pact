@@ -81,7 +81,7 @@ public class DataModelsEditConsumerTest extends UsersTestBase {
         return putDataModelsResponse.toPact();
     }
 
-    public static PactDslResponse buildGetDataModels(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetDataModels(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Data Models GET Interaction")
                 .path("/entando/api/dataModels")
@@ -91,7 +91,7 @@ public class DataModelsEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"modelId\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildPutDataModels(PactDslResponse builder) {
+    private PactDslResponse buildPutDataModels(PactDslResponse builder) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Data Models PUT Interaction")
                 .path("/entando/api/dataModels/100")
@@ -99,7 +99,7 @@ public class DataModelsEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{}");
     }
 
-    public static PactDslResponse buildGetDataModelToPutResponse(PactDslWithProvider builder) {
+    private PactDslResponse buildGetDataModelToPutResponse(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Models OPTIONS Interaction")
                 .path("/entando/api/dataModels/100")
                 .method("OPTIONS")

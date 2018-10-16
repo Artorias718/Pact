@@ -72,7 +72,7 @@ public class FragmentsSearchConsumerTest extends UsersTestBase {
         return searchFragmentResponse.toPact();
     }
 
-    public static PactDslResponse buildGetWidgets(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetWidgets(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Widgets get OPTIONS Interaction")
                 .path("/entando/api/widgets")
                 .method("OPTIONS")
@@ -89,7 +89,7 @@ public class FragmentsSearchConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"code\":\"pct\",\"used\":0,\"titles\":{\"en\":\"pct\",\"it\":\"pct\"},\"typology\":\"user\",\"group\":\"gruppo_prova\",\"pluginCode\":null,\"pluginDesc\":null,\"guiFragments\":[],\"hasConfig\":false},\n{\"code\":\"ANN_Archive\",\"used\":0,\"titles\":{\"en\":\"Announcements - Archive\",\"it\":\"Bandi - Archivio\"},\"typology\":\"user\",\"group\":\"free\",\"pluginCode\":null,\"pluginDesc\":null,\"guiFragments\":[],\"hasConfig\":false}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":100,\"lastPage\":1,\"totalItems\":79,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildSearchFragment(PactDslWithProvider builder, int page, int pageSize, String sort, String direction, String attribute, String operator, String value) {
+    private PactDslResponse buildSearchFragment(PactDslWithProvider builder, int page, int pageSize, String sort, String direction, String attribute, String operator, String value) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Fragment search OPTIONS Interaction")
                 .path("/entando/api/fragments")
                 .method("OPTIONS")

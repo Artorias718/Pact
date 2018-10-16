@@ -23,6 +23,7 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.UsersTestBase;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,7 +36,7 @@ import static org.entando.selenium.contracttests.PactUtil.*;
 import static java.lang.Thread.sleep;
 
 @ExtendWith(PactConsumerTestExt.class)
-@PactTestFor(providerName = "FileBrowserDeleteDProvider", port = "8080")
+@PactTestFor(providerName = "FileBrowserDeleteProvider", port = "8080")
 public class FileBrowserDeleteConsumerTest extends UsersTestBase {
 
     @Autowired
@@ -134,7 +135,11 @@ public class FileBrowserDeleteConsumerTest extends UsersTestBase {
         dTFileBrowserPage.getTable().getLinkOnTable( "public", 0, 0).click();
         Kebab kebab = dTFileBrowserPage.getTable().getKebabOnTable("pactfolder", 0, 3);
         kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Delete").click();
+        Utils.waitUntilIsVisible(driver, dTFileBrowserPage.getDeleteButton());
         dTFileBrowserPage.getDeleteButton().click();
+        Utils.waitUntilIsVisible(driver, dTFileBrowserPage.getUploadButton());
+        Utils.waitUntilIsVisible(driver, dTFileBrowserPage.getTableBody());
     }
 }

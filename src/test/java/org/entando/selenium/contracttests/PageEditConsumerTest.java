@@ -24,6 +24,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.ExpandableTable;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
@@ -48,6 +49,9 @@ public class PageEditConsumerTest extends UsersTestBase {
 
     @Autowired
     public DTPageAddPage dTPageAddPage;
+
+    @Autowired
+    public DTPageEditPage dTPageEditPage;
 
     @BeforeAll
     public void setupSessionAndNavigateToUserManagement (){
@@ -209,7 +213,9 @@ public class PageEditConsumerTest extends UsersTestBase {
                 "Page tree", "Actions");
 
         kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Edit").click();
+        Utils.waitUntilAttributeToBeNotEmpty(driver, dTPageEditPage.getEnTitleField(), "value");
         dTPageAddPage.setEnTitleField("PCT");
         dTPageAddPage.setItTitleField("PCT");
         ExpandableTable table = dTPageAddPage.getTable();

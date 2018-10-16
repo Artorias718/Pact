@@ -76,7 +76,7 @@ public class DataModelsDeleteConsumerTest extends UsersTestBase {
         return getDataModelsResponse.toPact();
     }
 
-    public static PactDslResponse buildGetDataModels(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetDataModels(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Data Models GET Interaction")
                 .path("/entando/api/dataModels")
@@ -86,7 +86,7 @@ public class DataModelsDeleteConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"modelId\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildDeleteDataModels(PactDslWithProvider builder) {
+    private PactDslResponse buildDeleteDataModels(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Models OPTIONS Interaction")
                 .path("/entando/api/dataModels/100")
                 .method("OPTIONS")

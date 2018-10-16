@@ -77,7 +77,7 @@ public class UserGroupDeleteConsumerTest extends UsersTestBase {
         return deleteGroupResponse.toPact();
     }
 
-    public static PactDslResponse buildGetGroups(PactDslResponse builder, String sort, int page, int pageSize) {
+    private PactDslResponse buildGetGroups(PactDslResponse builder, String sort, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/groups")
                 .method("OPTIONS")
@@ -96,7 +96,7 @@ public class UserGroupDeleteConsumerTest extends UsersTestBase {
         return standardResponse(request, json);
     }
 
-    public static PactDslResponse buildDeleteGroup(PactDslWithProvider builder) {
+    private PactDslResponse buildDeleteGroup(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/groups/unimportant")
                 .method("OPTIONS").headers("Access-control-request-method", "DELETE")

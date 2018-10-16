@@ -116,7 +116,7 @@ public class UserProfileTypeDeleteConsumerTest extends UsersTestBase {
         return putProfileTypesForAttributes.toPact();
     }
 
-    public static PactDslResponse buildGetProfileTypes(PactDslResponse builder, String sort, int page, int pageSize) {
+    private PactDslResponse buildGetProfileTypes(PactDslResponse builder, String sort, int page, int pageSize) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/profileTypes")
@@ -127,7 +127,7 @@ public class UserProfileTypeDeleteConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"code\":\"PCT\",\"name\":\"pact test pt\",\"status\":\"0\",\"attributes\":[]}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":2,\"totalItems\":11,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildGetProfileTypesStatus(PactDslResponse builder) {
+    private PactDslResponse buildGetProfileTypesStatus(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/profileTypesStatus")
                 .method("OPTIONS")
@@ -140,7 +140,7 @@ public class UserProfileTypeDeleteConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"ready\":\"UNP\",\"toRefresh\":[],\"refreshing\":[]},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetProfileTypesAttributes(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetProfileTypesAttributes(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/profileTypeAttributes")
                 .method("OPTIONS")
@@ -173,7 +173,7 @@ public class UserProfileTypeDeleteConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"code\":\"PCT\",\"name\":\"pact test pt\",\"status\":\"0\",\"attributes\":[]},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetProfileTypeForAttributes(PactDslResponse builder) {
+    private PactDslResponse buildGetProfileTypeForAttributes(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/profileTypes/PCT")
                 .method("OPTIONS")
@@ -186,7 +186,7 @@ public class UserProfileTypeDeleteConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"code\":\"PCT\",\"name\":\"pact test pt\",\"status\":\"0\",\"attributes\":[]},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildPutProfileTypeForAttributes(PactDslResponse builder) {
+    private PactDslResponse buildPutProfileTypeForAttributes(PactDslResponse builder) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/profileTypes/PCT")
@@ -194,7 +194,7 @@ public class UserProfileTypeDeleteConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"code\":\"PCT\",\"name\":\"pact test pt\",\"status\":\"0\",\"attributes\":[]},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildDeleteProfileType(PactDslResponse builder) {
+    private PactDslResponse buildDeleteProfileType(PactDslResponse builder) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/profileTypes/PCT")

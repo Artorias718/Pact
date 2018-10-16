@@ -77,7 +77,7 @@ public class UserRoleDetailsConsumerTest extends UsersTestBase {
         return getRoleDetailsResponse.toPact();
     }
 
-    public static PactDslResponse buildGetRoles(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetRoles(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/roles")
                 .method("OPTIONS")
@@ -94,7 +94,7 @@ public class UserRoleDetailsConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"code\":\"unimportant\",\"name\":\"UNIMPORTANT\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":2,\"totalItems\":11,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildPermission(PactDslWithProvider builder, int page, int pageSize) {
+    private PactDslResponse buildPermission(PactDslWithProvider builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/permissions")
                 .method("OPTIONS")
@@ -127,7 +127,7 @@ public class UserRoleDetailsConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"code\":\"unimportant\"},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetRoleDetails(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetRoleDetails(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Group Query OPTIONS Interaction")
                 .path("/entando/api/roles/unimportant/userreferences")
                 .method("OPTIONS")

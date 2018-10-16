@@ -62,7 +62,7 @@ public class UserDeleteConsumerTest extends UsersTestBase {
         return deleteUserResponse.toPact();
     }
 
-    public static PactDslResponse buildDeleteUser(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildDeleteUser(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder
                 .uponReceiving("The User Delete OPTIONS Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
@@ -74,7 +74,7 @@ public class UserDeleteConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"code\":\"gatto\"}],\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetUsers(PactDslWithProvider builder, int page, int pageSize) {
+    private PactDslResponse buildGetUsers(PactDslWithProvider builder, int page, int pageSize) {
         PactDslRequestWithPath request = builder.uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/users")
                 .method("GET")

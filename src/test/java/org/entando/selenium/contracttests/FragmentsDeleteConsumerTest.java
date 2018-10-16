@@ -28,6 +28,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.entando.selenium.utils.Utils;
 
 import static au.com.dius.pact.consumer.ConsumerPactRunnerKt.runConsumerTest;
 import static org.entando.selenium.contracttests.PactUtil.*;
@@ -89,7 +90,7 @@ public class FragmentsDeleteConsumerTest extends UsersTestBase {
         return standardResponse(request, "{}");
     }
 
-    public static PactDslResponse buildGetWidgets(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetWidgets(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Widgets get OPTIONS Interaction")
                 .path("/entando/api/widgets")
                 .method("OPTIONS")
@@ -112,6 +113,7 @@ public class FragmentsDeleteConsumerTest extends UsersTestBase {
         Kebab kebab = dTFragmentPage.getTable().getKebabOnTable("PCT",
                 "Code", "Actions");
         kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Delete").click();
         sleep(500);
     }

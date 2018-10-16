@@ -76,7 +76,7 @@ public class UserManageAuthConsumerTest extends UsersTestBase {
         return getUsersResponse.toPact();
     }
 
-    public static PactDslResponse buildGetAuth(PactDslWithProvider builder, int page, int pageSize) {
+    private PactDslResponse buildGetAuth(PactDslWithProvider builder, int page, int pageSize) {
             PactDslRequestWithPath optionsRequest = builder
                     .uponReceiving("The authorizations OPTIONS Interaction")
                     .path("/entando/api/users/UNIMPORTANT/authorities")
@@ -88,7 +88,7 @@ public class UserManageAuthConsumerTest extends UsersTestBase {
             return standardResponse(request, "{\"payload\":[],\"errors\":[],\"metaData\":{}}");
         }
 
-    public static PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath request = builder.uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/users")
                 .method("GET")
@@ -97,7 +97,7 @@ public class UserManageAuthConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-08-31 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":1,\"totalItems\":1,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildGetGroups(PactDslResponse builder) {
+    private PactDslResponse buildGetGroups(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Groups OPTIONS Interaction")
                 .path("/entando/api/groups")
                 .method("OPTIONS")
@@ -113,7 +113,7 @@ public class UserManageAuthConsumerTest extends UsersTestBase {
         return standardResponse(request, json);
     }
 
-    public static PactDslResponse buildPostAuth(PactDslResponse builder) {
+    private PactDslResponse buildPostAuth(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The authorization post OPTIONS Interaction")
                 .path("/entando/api/users/UNIMPORTANT/authorities")
                 .method("OPTIONS");
@@ -124,7 +124,7 @@ public class UserManageAuthConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"group\":\"testgroup4pact\",\"role\":\"UNIMPORTANT\"}],\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
+    private PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
 
         PactDslRequestWithPath request = builder
                 .uponReceiving("The ProfileTypes GET Interaction")

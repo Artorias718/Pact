@@ -82,14 +82,14 @@ public class UserEditConsumerTest extends UsersTestBase {
         return getProfileTypesResponse.toPact();
     }
 
-    public static PactDslResponse buildPutUser(PactDslResponse builder ){
+    private PactDslResponse buildPutUser(PactDslResponse builder ){
         PactDslRequestWithPath request = builder.uponReceiving("The User put PUT Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
                 .method("PUT");
         return standardResponse(request, "{\"payload\":[{\"password\":\"1.000755E7\",\"passwordConfirm\":\"1.000755E7\",\"reset\":\"true\"}]}");
     }
 
-    public static PactDslResponse buildGetUsers(PactDslWithProvider builder, int page, int pageSize) {
+    private PactDslResponse buildGetUsers(PactDslWithProvider builder, int page, int pageSize) {
 
         PactDslRequestWithPath request = builder.uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/users")
@@ -99,7 +99,7 @@ public class UserEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-08-31 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":1,\"totalItems\":1,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildGetUserToPut(PactDslResponse builder) {
+    private PactDslResponse buildGetUserToPut(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The User Query OPTIONS Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
                 .method("OPTIONS")
@@ -111,7 +111,7 @@ public class UserEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\": {\"username\": \"UNIMPORTANT\", \"registration\": \"2018-09-18 00:00:00\", \"lastLogin\": null, \"lastPasswordChange\": null}}");
     }
 
-    public static PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
+    private PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
         PactDslRequestWithPath request = builder
                 .uponReceiving("The ProfileTypes GET Interaction")
                 .path("/entando/api/profileTypes")

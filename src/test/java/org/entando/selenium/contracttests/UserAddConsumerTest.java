@@ -90,7 +90,7 @@ public class UserAddConsumerTest extends UsersTestBase {
         return getProfileTypesResponse.toPact();
     }
 
-    public static PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath request = builder.uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/users")
                 .method("GET")

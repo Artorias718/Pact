@@ -25,6 +25,7 @@ import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.PageTreeTestBase;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,9 @@ public class PageDetailsConsumerTest extends UsersTestBase {
 
     @Autowired
     public DTPageTreePage dTPageTreePage;
+
+    @Autowired
+    public DTPageDetailsPage dTPageDetailsPage;
 
     @BeforeAll
     public void setupSessionAndNavigateToUserManagement (){
@@ -112,14 +116,14 @@ public class PageDetailsConsumerTest extends UsersTestBase {
         return standardResponse(request, "{}");
     }
 
-
-
     @Test
     public void runTest() throws InterruptedException {
 
         Kebab kebab = dTPageTreePage.getTable().getKebabOnTable("pagina4",
                 "Page tree", "Actions");
         kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Details").click();
+        Utils.waitUntilIsVisible(driver, dTPageDetailsPage.getInfoButton());
     }
 }

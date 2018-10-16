@@ -24,6 +24,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -124,7 +125,9 @@ public class FileBrowserAddDirectoryConsumerTest extends UsersTestBase {
     public void runTest() throws InterruptedException {
 
         dTFileBrowserPage.getTable().getLinkOnTable( "public", 0, 0).click();
+        Utils.waitUntilIsVisible(driver, dTFileBrowserPage.getUploadButton());
         dTFileBrowserPage.getCreateFolderButton().click();
+        Utils.waitUntilIsVisible(driver, dTFileBrowserCreateFolderPage.getSaveButton());
         dTFileBrowserCreateFolderPage.setFolderName("pactFolder");
         dTFileBrowserCreateFolderPage.getSaveButton().click();
     }

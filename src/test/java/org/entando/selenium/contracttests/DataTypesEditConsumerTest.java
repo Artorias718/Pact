@@ -23,6 +23,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,7 @@ public class DataTypesEditConsumerTest extends UsersTestBase {
         return getDataTypesStatus.toPact();
     }
 
-    public static PactDslResponse buildGetDataTypesStatus(PactDslResponse builder) {
+    private PactDslResponse buildGetDataTypesStatus(PactDslResponse builder) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Data Types Status GET Interaction")
                 .path("/entando/api/dataTypesStatus")
@@ -90,7 +91,7 @@ public class DataTypesEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"ready\":[\"AAA\",\"SLN\",\"SLM\",\"SLL\"],\"toRefresh\":[],\"refreshing\":[]},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetDataTypesAttributes(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetDataTypesAttributes(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Types attribues get OPTIONS Interaction")
                 .path("/entando/api/dataTypeAttributes")
                 .method("OPTIONS")
@@ -107,7 +108,7 @@ public class DataTypesEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[\"Boolean\",\"CheckBox\",\"Composite\",\"Date\",\"Enumerator\",\"EnumeratorMap\",\"Hypertext\",\"List\",\"Longtext\",\"Monolist\",\"Monotext\",\"Number\",\"Text\",\"ThreeState\",\"Timestamp\"],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":100,\"lastPage\":1,\"totalItems\":15,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    public static PactDslResponse buildGetDataTypesToPut(PactDslWithProvider builder) {
+    private PactDslResponse buildGetDataTypesToPut(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Type get OPTIONS Interaction")
                 .path("/entando/api/dataTypes/PCT")
                 .method("OPTIONS")
@@ -120,7 +121,7 @@ public class DataTypesEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"code\":\"PCT\",\"name\":\"pactDataType\",\"status\":\"0\",\"attributes\":[],\"viewPage\":null,\"listModel\":null,\"defaultModel\":null},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildPutDataTypes(PactDslResponse builder) {
+    private PactDslResponse buildPutDataTypes(PactDslResponse builder) {
 
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Data Type PUT Interaction")
@@ -129,7 +130,7 @@ public class DataTypesEditConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"code\":\"PCT\",\"name\":\"pactDataType\",\"status\":\"0\",\"attributes\":[],\"viewPage\":null,\"listModel\":null,\"defaultModel\":null},\"errors\":[],\"metaData\":{}}");
     }
 
-    public static PactDslResponse buildGetDataTypes(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildGetDataTypes(PactDslResponse builder, int page, int pageSize) {
         PactDslRequestWithPath request = builder.
                 uponReceiving("The Data Types GET Interaction")
                 .path("/entando/api/dataTypes")
@@ -145,7 +146,9 @@ public class DataTypesEditConsumerTest extends UsersTestBase {
         Kebab kebab = dTDataTypesPage.getTable().getKebabOnTable("PCT",
                 "Code", "Actions");
         kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Edit").click();
+        Utils.waitUntilIsVisible(driver,dTDataTypesAddPage.getSaveButton());
         dTDataTypesAddPage.setName("pactDataType");
         dTDataTypesAddPage.getSaveButton().click();
     }

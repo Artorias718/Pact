@@ -24,6 +24,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -145,10 +146,14 @@ public class FileBrowserAddFileConsumerTest extends UsersTestBase {
     public void runTest() throws InterruptedException {
 
         dTFileBrowserPage.getTable().getLinkOnTable( "public", 0, 0).click();
+        Utils.waitUntilIsVisible(driver, dTFileBrowserPage.getUploadButton());
         dTFileBrowserPage.getCreateTextFileButton().click();
         dTFileBrowserCreateTextFilePage.setFileName("pactFile");
+        Utils.waitUntilIsVisible(driver, dTFileBrowserCreateTextFilePage.getSaveButton());
         dTFileBrowserCreateTextFilePage.setFileContent("hello by pact");
         dTFileBrowserCreateTextFilePage.getSelectType().selectByVisibleText("txt");
         dTFileBrowserCreateTextFilePage.getSaveButton().click();
+        Utils.waitUntilIsVisible(driver, dTFileBrowserPage.getUploadButton());
+        Utils.waitUntilIsVisible(driver, dTFileBrowserPage.getTableBody());
     }
 }

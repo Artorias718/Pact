@@ -75,7 +75,7 @@ public class CategoriesDeleteConsumerTest extends UsersTestBase {
         return deleteCategoriesResponse.toPact();
     }
 
-    public static PactDslResponse buildDeleteCategories(PactDslWithProvider builder) {
+    private PactDslResponse buildDeleteCategories(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Categories delete OPTIONS Interaction")
                 .path("/entando/api/categories/category3")
                 .method("OPTIONS")

@@ -23,6 +23,7 @@ import au.com.dius.pact.model.MockProviderConfig;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
+import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -75,7 +76,7 @@ public class DataTypesDeleteConsumerTest extends UsersTestBase {
         return deleteDataTypesResponse.toPact();
     }
 
-    public static PactDslResponse buildDeleteDataTypes(PactDslWithProvider builder) {
+    private PactDslResponse buildDeleteDataTypes(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Types delete OPTIONS Interaction")
                 .path("/entando/api/dataTypes/SLN")
                 .method("OPTIONS")
@@ -96,7 +97,9 @@ public class DataTypesDeleteConsumerTest extends UsersTestBase {
                 "Code", "Actions");
 
         kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Delete").click();
+        Utils.waitUntilIsVisible(driver, dTDataTypesPage.getDeleteModalButton());
         dTDataTypesPage.getDeleteModalButton().click();
     }
 }

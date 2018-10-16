@@ -74,7 +74,7 @@ public class DataModelsSearchConsumerTest extends UsersTestBase {
         return searchDataModelsByTypeResponse.toPact();
     }
 
-    public static PactDslResponse buildSearchAllDataModels(PactDslWithProvider builder, String sort, String direction, int page, int pageSize) {
+    private PactDslResponse buildSearchAllDataModels(PactDslWithProvider builder, String sort, String direction, int page, int pageSize) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Models OPTIONS Interaction")
                 .path("/entando/api/dataModels")
                 .method("OPTIONS")
@@ -95,7 +95,7 @@ public class DataModelsSearchConsumerTest extends UsersTestBase {
         return standardResponse(request, "{}");
     }
 
-    public static PactDslResponse buildSearchDataModelsByTypeResponse(PactDslResponse builder, String sort, String direction, int page, int pageSize, String attribute, String operator, String value) {
+    private PactDslResponse buildSearchDataModelsByTypeResponse(PactDslResponse builder, String sort, String direction, int page, int pageSize, String attribute, String operator, String value) {
         PactDslRequestWithPath optionsRequest = builder.uponReceiving("The Data Models OPTIONS Interaction")
                 .path("/entando/api/dataModels")
                 .method("OPTIONS")
