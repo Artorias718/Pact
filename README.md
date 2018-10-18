@@ -1,6 +1,3 @@
-<a><img src="https://avatars2.githubusercontent.com/u/673103?s=280&v=4" title="Entando" width="120"></a>
-<a><img src="https://blobscdn.gitbook.com/v0/b/gitbook-28427.appspot.com/o/spaces%2F-LC2AYrI9MJa-_aAjE1u%2Favatar.png?generation=1525840515697023&alt=media" title="Entando" width="100" hspace="40"></a>
-
 # Pact tests
 
 Implementation of tests for API contracts based on Pact between the Entando App Builder Application (Consumer) and the Entando MAPP Engine Application (Provider).
@@ -48,6 +45,5 @@ you can use `CTRL+C` to get the command prompt back.
        ```bash
        docker run -it -p 8080:8080 -e DOMAIN=http://localhost:8080/entando entando/engine-api
        ```
-        
-       
-       
+<a><img src="https://avatars2.githubusercontent.com/u/673103?s=280&v=4" title="Entando" width="120"></a>
+<a><img src="https://blobscdn.gitbook.com/v0/b/gitbook-28427.appspot.com/o/spaces%2F-LC2AYrI9MJa-_aAjE1u%2Favatar.png?generation=1525840515697023&alt=media" title="Entando" width="100" hspace="40"></a>
