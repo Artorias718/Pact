@@ -1,3 +1,7 @@
+<a href="http://fvcproductions.com"><img src="https://avatars1.githubusercontent.com/u/4284691?v=3&s=200" title="FVCproductions" alt="FVCproductions"></a>
+
+<!-- [![FVCproductions](https://avatars1.githubusercontent.com/u/4284691?v=3&s=200)](http://fvcproductions.com) -->
+
 # PactTests
 
 Implementation of tests for API contracts based on Pact between the Entando App Builder Application (Consumer) and the Entando MAPP Engine Application (Provider).
@@ -15,7 +19,7 @@ The container runs in the background and incrementally rebuilds the site each
 time a file changes. The container runs in the foreground, but
 you can use `CTRL+C` to get the command prompt back.
 
-### Installing
+### Running consumer tests
 
 1.  Setup the appbuilder container.
 
@@ -29,7 +33,22 @@ you can use `CTRL+C` to get the command prompt back.
        ```bash
        docker run -it -p 5000:5000 -e DOMAIN=http://localhost:8080/entando entando/appbuilder:5.0.1-SNAPSHOT
        ```
-    c. Set this `Dwebdriver.chrome.driver=/home/ampie/chromedriver` as webdriver JVM parameter, then you can just run the tests from your IDE.
+2.  Set this `Dwebdriver.chrome.driver=/home/ampie/chromedriver` as webdriver JVM parameter, then you can just run the tests from your IDE.
+    
+### Running provider tests
+
+1.  Setup the appbuilder container.
+
+    a. Pull the entando-engine image by running:
+    
+       ```bash
+       docker pull entando/engine-api
+       ```
+    b. Run the image by running:
+    
+       ```bash
+       docker run -it -p 8080:8080 -e DOMAIN=http://localhost:8080/entando entando/engine-api
+       ```
         
        
        
