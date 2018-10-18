@@ -1,6 +1,6 @@
-<a><img src="https://avatars2.githubusercontent.com/u/673103?s=280&v=4" title="Entando" height=50%></a>
+<a><img src="https://avatars2.githubusercontent.com/u/673103?s=280&v=4" title="Entando" style="height:150px;"></a>
 
-# PactTests
+# Pact tests
 
 Implementation of tests for API contracts based on Pact between the Entando App Builder Application (Consumer) and the Entando MAPP Engine Application (Provider).
 
