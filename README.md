@@ -1,4 +1,4 @@
-<a><img src="https://avatars2.githubusercontent.com/u/673103?s=280&v=4" title="Entando" width="100"></a>
+<a><img src="https://avatars2.githubusercontent.com/u/673103?s=280&v=4" title="Entando" width="120"></a>
 <a><img src="https://blobscdn.gitbook.com/v0/b/gitbook-28427.appspot.com/o/spaces%2F-LC2AYrI9MJa-_aAjE1u%2Favatar.png?generation=1525840515697023&alt=media" title="Entando" width="100" hspace="40"></a>
 
 # Pact tests
