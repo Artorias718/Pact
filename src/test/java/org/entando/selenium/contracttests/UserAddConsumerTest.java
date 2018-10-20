@@ -41,9 +41,6 @@ import static java.lang.Thread.sleep;
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "UserAddProvider", port = "8080")
 public class UserAddConsumerTest extends UsersTestBase {
-    private Random generator = new Random();
-    private int randomNumber = generator.nextInt(9999);
-    private String username = "1SLNM_TEST_" + randomNumber;
 
     @Autowired
     public DTDashboardPage dTDashboardPage;
@@ -72,11 +69,11 @@ public class UserAddConsumerTest extends UsersTestBase {
         PactDslResponse getGroupsResponse = buildGetGroups(getWidgetsResponse);
         PactDslResponse getPageModelsResponse = buildGetPageModels(getGroupsResponse);
         PactDslResponse getLanguagesResponse = buildGetLanguages(getPageModelsResponse);
-        PactDslResponse getProfileTypesResponse = buildGetProfileTypes(getLanguagesResponse);
+        PactDslResponse getProfileTypesResponse = PactUtil.buildGetProfileTypes(getLanguagesResponse);
+
         MockProviderConfig config = MockProviderConfig.httpConfig("localhost", 8080);
-        PactVerificationResult result = runConsumerTest(getProfileTypesResponse.toPact(), config, mockServer -> {
+        PactVerificationResult result = runConsumerTest(addStandardHeaders(getProfileTypesResponse).toPact(), config, mockServer -> {
             login();
-            //Navigation to the page
             dTDashboardPage.SelectSecondOrderLinkWithSleep("User Management", "Users");
             Utils.waitUntilIsVisible(driver, dTUsersPage.getAddButton());
         });
@@ -85,8 +82,9 @@ public class UserAddConsumerTest extends UsersTestBase {
     @Pact(provider = "UserAddProvider", consumer = "UserAddConsumer")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
         PactDslResponse postUserResponse = buildPostUser(builder);
-        PactDslResponse getUsersResponse = buildGetUsers(postUserResponse,1,10);
+        PactDslResponse getUsersResponse = buildGetUsers(postUserResponse,1,1);
         PactDslResponse getProfileTypesResponse = buildGetProfileTypes(getUsersResponse);
+        //PactDslResponse ActivityStreamUpdate = buildActivityStreamUpdate(getProfileTypesResponse);
         return getProfileTypesResponse.toPact();
     }
 
@@ -96,104 +94,56 @@ public class UserAddConsumerTest extends UsersTestBase {
                 .method("GET")
                 .matchQuery("page", "\\d+", "" + page)
                 .matchQuery("pageSize",  "\\d+", ""+pageSize);
-        return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-08-31 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":1,\"totalItems\":1,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+        return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-10-20 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"inactive\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":2,\"totalItems\":2,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
     private PactDslResponse buildPostUser(PactDslWithProvider builder) {
         PactDslRequestWithPath optionsRequest = builder
                 .uponReceiving("The User Add OPTIONS Interaction")
                 .path("/entando/api/users/")
-                .method("OPTIONS")
-                .headers("Access-control-request-method", "POST")
-                .body("");
+                .method("OPTIONS");
         PactDslResponse optionsResponse = optionsResponse(optionsRequest);
         PactDslRequestWithPath request = optionsResponse
                 .uponReceiving("The User Add POST Interaction")
                 //TODO add the expectation for the incoming data
                 .path("/entando/api/users/")
-                .method("POST");
-        return standardResponse(request, "{\"payload\":{\"username\":\"1SLNM_TEST_2354\",\"registration\":\"2018-09-03 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1},\"errors\":[],\"metaData\":{}}");
+                .method("POST")
+                .body("{\"username\": \"UNIMPORTANT\", \"password\": \"adminadmin\", \"passwordConfirm\": \"adminadmin\", \"profileType\": \"PFL\"}");;
+        return standardResponse(request, "{\"payload\":{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-10-20 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"inactive\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1},\"errors\":[],\"metaData\":{}}");
+
+    }
+
+    private PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
+        PactDslRequestWithPath optionsRequest = builder
+                .uponReceiving("The ProfileTypes OPTIONS Interaction")
+                .path("/entando/api/profileTypes")
+                .method("OPTIONS")
+                .matchQuery("page", "1")
+                .matchQuery("pageSize", "\\d+", "" + 10);
+        PactDslResponse optionsResponse = optionsResponse(optionsRequest);
+        PactDslRequestWithPath request = optionsResponse
+                .uponReceiving("The ProfileTypes GET Interaction")
+                .path("/entando/api/profileTypes")
+                .method("GET")
+                .matchQuery("page", "1")
+                .matchQuery("pageSize", "\\d+","" + 10);
+        return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
     @Test
     public void runTest() throws InterruptedException {
-        /*
-            Parameters
-        */
-        //Link menù buttons
 
-        //Final page title
-        String pageTitle = "Add";
-
-        //Usernames to set
-        String falseUsername = "1SLNM_TEST-*-" + randomNumber;
-
-        //Passwords to set
-        String password = Double.toString(Math.pow(10, super.minPasswordLength - 1) + randomNumber);
-        String falsePassword = Integer.toString((int) Math.round(Math.pow(10, super.minPasswordLength - 2) + randomNumber));
-        String falseConfirmPassword = Integer.toString((int) Math.round(Math.pow(10, super.minPasswordLength - 3) + randomNumber));
-
-        //Status string
-        String statusString = " Active";
-
-
-        /*
-            Actions and asserts
-        */
         dTUsersPage.getAddButton().click();
-
         Utils.waitUntilIsVisible(driver, dTUserAddPage.getPageTitle());
 
+        dTUserAddPage.setUsernameField("UNIMPORTANT");
+        dTUserAddPage.setPasswordField("adminadmin");
+        dTUserAddPage.setPasswordConfirmField("adminadmin");
+        dTUserAddPage.getProfileTypeSelect().selectByVisibleText("Default user profile");
 
-        //Asserts the PAGE TITLE is the expected one
-        Assert.assertEquals(pageTitle, dTUserAddPage.getPageTitle().getText());
-
-        //Asserts the presence of the HELP button
-        dTUserAddPage.getHelp().click();
-        Utils.waitUntilIsVisible(driver, dTUserAddPage.getTooltip());
-        Assert.assertTrue(dTUserAddPage.getTooltip().isDisplayed());
-        //Verify "field required" warning
-        dTUserAddPage.setUsernameField(falseUsername);
-        dTUserAddPage.setPasswordField(falsePassword);
-        dTUserAddPage.setPasswordConfirmField(falseConfirmPassword);
-        dTUserAddPage.getProfileType().click();
-        dTUserAddPage.getUsernameField().click();
-        Logger.getGlobal().info(falsePassword);
-        Assert.assertTrue(dTUserAddPage.getUsernameFieldError().isDisplayed());
-        Assert.assertTrue(dTUserAddPage.getPasswordFieldError().isDisplayed());
-        Assert.assertTrue(dTUserAddPage.getPasswordConfirmFieldError().isDisplayed());
-        Assert.assertTrue(dTUserAddPage.getProfileTypeError().isDisplayed());
-
-        //Verify Switch
-        Assert.assertFalse(dTUserAddPage.getStatusSwitch().isOn());
-
-        //Verify Save buttons are disable
-        Assert.assertFalse(dTUserAddPage.getSaveButton().isEnabled());
-
-
-        //Compilation of the page
-        dTUserAddPage.setUsernameField(this.username);
-        dTUserAddPage.setPasswordField(password);
-        dTUserAddPage.setPasswordConfirmField(password);
-        dTUserAddPage.getProfileTypeSelect().selectByVisibleText(profileType);
-        if (super.status) {
-            dTUserAddPage.getStatusSwitch().setOn();
-        } else {
-            dTUserAddPage.getStatusSwitch().setOff();
-        }
-
-
-        //Save and come back to the Users list
         Assert.assertTrue(dTUserAddPage.getSaveButton().isEnabled());
         dTUserAddPage.getSaveButton().click();
-//        Utils.waitUntilIsPresent(driver, dTUsersPage.spinnerTag);
         Utils.waitUntilIsDisappears(driver, dTUsersPage.spinnerTag);
-
-        /** Debug code **/
-        Logger.getGlobal().info("TEST CONCLUSO");
-        if (Logger.getGlobal().getLevel() == Level.INFO) {
-//            sleep(SLEEPTIME);
-        }
     }
 }
 

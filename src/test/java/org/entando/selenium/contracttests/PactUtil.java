@@ -1,6 +1,7 @@
 package org.entando.selenium.contracttests;
 
 import au.com.dius.pact.consumer.dsl.*;
+import au.com.dius.pact.provider.junit.State;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,7 +23,6 @@ public class PactUtil {
 //
 //        return dslJsonBody;
 //    }
-
 
     private static void copyStructureInto(JSONObject jsonObject, PactDslJsonBody dslJsonBody) {
         for (String string : jsonObject.keySet()) {
@@ -61,6 +61,7 @@ public class PactUtil {
         }
     }
 
+    @State("with-data")
     public static PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder
                 .uponReceiving("The ProfileTypes OPTIONS Interaction")
@@ -75,7 +76,9 @@ public class PactUtil {
                 .method("GET")
                 .matchQuery("page", "\\d+")
                 .matchQuery("pageSize", "\\d+");
-        return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"},{\"code\":\"1DF\",\"name\":\"1SeleniumTest_DontTouch\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"name\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+        return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"name\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+        //return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{}}");
+
     }
 
     public static PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
@@ -146,7 +149,7 @@ public class PactUtil {
                 .body(toDslJsonBody(json)));
     }
 
-    private static JSONObject toDslJsonBody(String json) {
+    public static JSONObject toDslJsonBody(String json) {
         return new JSONObject(json);
     }
 
@@ -239,8 +242,9 @@ public class PactUtil {
     }
 
     public static PactDslResponse addStandardHeaders(PactDslResponse response) {
-        response.matchHeader("Allow", MATCH_ANY_HTTP_VERB, "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH")
-                .matchHeader("Access-Control-Allow-Methods",MATCH_ANY_HTTP_VERB, "GET, POST, PUT, DELETE, OPTIONS")
+        response
+                //.matchHeader("Allow", MATCH_ANY_HTTP_VERB, "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH")
+                //.matchHeader("Access-Control-Allow-Methods",MATCH_ANY_HTTP_VERB, "GET, POST, PUT, DELETE, OPTIONS")
                 .matchHeader("Access-Control-Allow-Origin", "\\*","*")
                 .matchHeader("Access-Control-Max-Age", "3600", "3600")
                 .matchHeader("Connection", "keep-alive", "keep-alive")
