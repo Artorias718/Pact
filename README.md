@@ -1,6 +1,6 @@
 # Pact tests
 
-Implementation of tests for API contracts based on Pact between the Entando App Builder Application (Consumer) and the Entando MAPP Engine Application (Provider).
+Implementation of contract tests with Pact between the Entando App Builder Application (Consumer) and the Entando MAPP Engine Application (Provider).
 
 ## Getting Started
 
