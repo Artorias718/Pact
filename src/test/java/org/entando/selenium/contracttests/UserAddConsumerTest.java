@@ -103,7 +103,7 @@ public class UserAddConsumerTest extends UsersTestBase {
                 //TODO add the expectation for the incoming data
                 .path("/entando/api/users/")
                 .method("POST")
-                .body("{\"username\": \"UNIMPORTANT\", \"password\": \"adminadmin\", \"passwordConfirm\": \"adminadmin\", \"profileType\": \"PFL\"}");;
+                .body("{\"username\": \"UNIMPORTANT\", \"password\": \"adminadmin\", \"passwordConfirm\": \"adminadmin\", \"profileType\": \"PFL\"}");
         return standardResponse(request, "{\"payload\":{\"username\":\"UNIMPORTANT\",\"registration\":\""+LocalDate+"\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"inactive\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1},\"errors\":[],\"metaData\":{}}");
     }
 

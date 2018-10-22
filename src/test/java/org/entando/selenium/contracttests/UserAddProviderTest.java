@@ -75,42 +75,6 @@ public class UserAddProviderTest {
         accesToken=new JSONObject(new String(outstream.toByteArray())).getString("access_token");
         sessionId=response.getFirstHeader("Set-Cookie");
 
-        /*HttpPost postProfileType = new HttpPost( "http://localhost:8080/entando/api/profileTypes");
-
-        String postData = "{\"code\": \"AXA\",\"name\": \"axa profile\",\"status\": \"0\"}";
-        postProfileType.setEntity(new StringEntity(postData));
-        postProfileType.addHeader("Authorization", "Bearer " + accesToken);
-        postProfileType.addHeader("Origin", "http://localhost:5000");
-        postProfileType.addHeader("Accept-Encoding","gzip, deflate, br");
-        postProfileType.addHeader("Host","localhost:8080");
-        postProfileType.addHeader("Accept-Language","en-GB,en-US;q=0.9,en;q=0.8");
-        postProfileType.addHeader("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
-        postProfileType.addHeader("Referer","http://localhost:5000/");
-        postProfileType.addHeader("Content-Type", "application/json");
-        postProfileType.addHeader("Connection", "keep-alive");*/
-        //postProfileType.addHeader("Accept", "*/*");
-
-        //CloseableHttpResponse response2 = HttpClients.createDefault().execute(postProfileType);
-        //System.out.println("\n" + response2 + "\n");
-
-        /*HttpGet getProfileType = new HttpGet("http://localhost:8080/entando/api/profileTypes");
-        getProfileType.addHeader("Authorization", "Bearer " + accesToken);
-        getProfileType.addHeader("Origin", "http://localhost:5000");
-        getProfileType.addHeader("Accept-Encoding","gzip, deflate, br");
-        getProfileType.addHeader("Host","localhost:8080");
-        getProfileType.addHeader("Accept-Language","en-GB,en-US;q=0.9,en;q=0.8");
-        getProfileType.addHeader("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
-        getProfileType.addHeader("Referer","http://localhost:5000/");
-        getProfileType.addHeader("Content-Type", "application/json");
-        getProfileType.addHeader("Connection", "keep-alive");*/
-        //getProfileType.addHeader("Accept", "*/*");
-        /*List<NameValuePair> params2 = new ArrayList<NameValuePair>();
-        params2.add(new BasicNameValuePair("page","1"));
-        params2.add(new BasicNameValuePair("pageSize","10"));
-
-        CloseableHttpResponse response3 = HttpClients.createDefault().execute(getProfileType);
-        System.out.println("\n" + response3 + "\n");*/
-
     }
 
     @TestTemplate

@@ -83,10 +83,11 @@ public class UserEditConsumerTest extends UsersTestBase {
     }
 
     private PactDslResponse buildPutUser(PactDslResponse builder ){
-        PactDslRequestWithPath request = builder.uponReceiving("The User put PUT Interaction")
+        PactDslRequestWithPath request = builder.uponReceiving("The User PUT Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
-                .method("PUT");
-        return standardResponse(request, "{\"payload\":[{\"password\":\"1.000755E7\",\"passwordConfirm\":\"1.000755E7\",\"reset\":\"true\"}]}");
+                .method("PUT")//body + ricco
+                .body("{\"username\":\"UNIMPORTANT\",\"registration\":\""+LocalDate+"\",\"lastLogin\":null,\"lastPasswordChange\":null,\"password\":\"password\",\"passwordConfirm\":\"password\"}");
+        return standardResponse(request, "{\"payload\":{\"lastPasswordChange\": \""+LocalDate+"\",\"lastLogin\": null,\"credentialsNotExpired\": true,\"username\": \"UNIMPORTANT\",\"accountNotExpired\": true,\"profileType\": null,\"status\": \"inactive\",\"maxMonthsSinceLastPasswordChange\": -1,\"maxMonthsSinceLastAccess\": -1,\"profileAttributes\": {},\"registration\": \""+LocalDate+"\"},\"errors\":[],\"metaData\": {}}");
     }
 
     private PactDslResponse buildGetUsers(PactDslWithProvider builder, int page, int pageSize) {
@@ -96,19 +97,19 @@ public class UserEditConsumerTest extends UsersTestBase {
                 .method("GET")
                 .matchQuery("page", "\\d+", "" + page)
                 .matchQuery("pageSize",  "\\d+", ""+pageSize);
-        return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-08-31 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":1,\"totalItems\":1,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+        return standardResponse(request, "{\"payload\":[{\"lastPasswordChange\":null,\"lastLogin\": null,\"credentialsNotExpired\": true,\"username\": \"UNIMPORTANT\",\"accountNotExpired\": true,\"profileType\": null,\"status\": \"inactive\",\"maxMonthsSinceLastPasswordChange\": -1,\"maxMonthsSinceLastAccess\": -1,\"profileAttributes\": {},\"registration\": \""+LocalDate+"\"},{\"username\":\"admin\",\"registration\":\"2008-10-10 00:00:00\",\"lastLogin\":\""+LocalDate+"\",\"lastPasswordChange\":\"2018-09-18 00:00:00\",\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{\"fullname\":\"\",\"email\":\"\"},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":2,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
     private PactDslResponse buildGetUserToPut(PactDslResponse builder) {
-        PactDslRequestWithPath optionsRequest = builder.uponReceiving("The User Query OPTIONS Interaction")
+        PactDslRequestWithPath optionsRequest = builder.uponReceiving("The get User to put OPTIONS Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
                 .method("OPTIONS")
                 .headers("Access-control-request-method", "GET");
         PactDslResponse optionsResponse = optionsResponse(optionsRequest);
-        PactDslRequestWithPath request = optionsResponse.uponReceiving("The user to put request")
+        PactDslRequestWithPath request = optionsResponse.uponReceiving("The get User to put GET request")
                 .path("/entando/api/users/UNIMPORTANT")
                 .method("GET");
-        return standardResponse(request, "{\"payload\": {\"username\": \"UNIMPORTANT\", \"registration\": \"2018-09-18 00:00:00\", \"lastLogin\": null, \"lastPasswordChange\": null}}");
+        return standardResponse(request, "{\"payload\":{\"lastLogin\":null,\"registration\":\""+LocalDate+"\",\"lastPasswordChange\":null,\"username\":\"UNIMPORTANT\"}}");
     }
 
     private PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
@@ -116,22 +117,27 @@ public class UserEditConsumerTest extends UsersTestBase {
                 .uponReceiving("The ProfileTypes GET Interaction")
                 .path("/entando/api/profileTypes")
                 .method("GET")
-                .matchQuery("page", "\\d+")
-                .matchQuery("pageSize", "\\d+");
-        return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"},{\"code\":\"1DF\",\"name\":\"1SeleniumTest_DontTouch\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"name\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+                .matchQuery("page", "\\d+","1")
+                .matchQuery("pageSize", "\\d+","10");
+        return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
     @Test
     public void runTest() throws InterruptedException {
 
+        String pass = "password";
         Kebab kebab = dTUsersPage.getTable().getKebabOnTable("UNIMPORTANT", usersTableHeaderTitles.get(0), usersTableHeaderTitles.get(4));
         kebab.getClickable().click();
         Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         sleep(200);
         kebab.getAction("Edit").click();
-        dTUserEditPage.setPassword("password");
-        dTUserEditPage.setPasswordConfirm("password");
-        dTUserEditPage.getResetSwitch().setOn();
+        dTUserEditPage.setPassword("");
+        dTUserEditPage.setPassword(pass);
+        dTUserEditPage.setPasswordConfirm(pass);
+        dTUserEditPage.getResetSwitch().setOff();
         dTUserEditPage.getSaveButton().click();
+
     }
 }
+
+
