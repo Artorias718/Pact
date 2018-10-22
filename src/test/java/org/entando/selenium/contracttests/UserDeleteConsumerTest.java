@@ -18,9 +18,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import static au.com.dius.pact.consumer.ConsumerPactRunnerKt.runConsumerTest;
-import static java.lang.Thread.sleep;
 import static org.entando.selenium.contracttests.PactUtil.*;
 
 @ExtendWith(PactConsumerTestExt.class)
@@ -38,7 +36,6 @@ public class UserDeleteConsumerTest extends UsersTestBase {
         PactDslWithProvider builder = ConsumerPactBuilder.consumer("LoginConsumer").hasPactWith("LoginProvider");
         PactDslResponse accessTokenResponse = buildGetAccessToken(builder);
         PactDslResponse getUsersResponse = PactUtil.buildGetUsers(accessTokenResponse,1,1);
-        getUsersResponse = PactUtil.buildGetUsers(getUsersResponse,1,10);
         PactDslResponse getPagesResponse = buildGetPages(getUsersResponse);
         PactDslResponse getPageStatusResponse = buildGetPageStatus(getPagesResponse);
         PactDslResponse getWidgetsResponse = buildGetWidgets(getPageStatusResponse);
@@ -58,11 +55,11 @@ public class UserDeleteConsumerTest extends UsersTestBase {
     @Pact(provider = "UserDeleteProvider", consumer = "UserDeleteConsumer")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
         PactDslResponse getUsersResponse = buildGetUsers(builder,1,10);
-        PactDslResponse deleteUserResponse = buildDeleteUser(getUsersResponse, 1,10);
+        PactDslResponse deleteUserResponse = buildDeleteUser(getUsersResponse);
         return deleteUserResponse.toPact();
     }
 
-    private PactDslResponse buildDeleteUser(PactDslResponse builder, int page, int pageSize) {
+    private PactDslResponse buildDeleteUser(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder
                 .uponReceiving("The User Delete OPTIONS Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
@@ -71,7 +68,7 @@ public class UserDeleteConsumerTest extends UsersTestBase {
         PactDslRequestWithPath request = optionsResponse.uponReceiving("The User Query DELETE Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
                 .method("DELETE");
-        return standardResponse(request, "{\"payload\":[{\"code\":\"gatto\"}],\"errors\":[],\"metaData\":{}}");
+        return standardResponse(request, "{\"payload\":{\"code\":\"UNIMPORTANT\"},\"errors\":[],\"metaData\":{}}");
     }
 
     private PactDslResponse buildGetUsers(PactDslWithProvider builder, int page, int pageSize) {
@@ -80,11 +77,13 @@ public class UserDeleteConsumerTest extends UsersTestBase {
                 .method("GET")
                 .matchQuery("page", "\\d+", "" + page)
                 .matchQuery("pageSize",  "\\d+", ""+pageSize);
-        return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-08-31 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":1,\"totalItems\":1,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+        return standardResponse(request, "{\"payload\":[{\"username\":\"admin\",\"registration\":\"2008-10-10 00:00:00\",\"lastLogin\":\""+LocalDate+"\",\"lastPasswordChange\":\"2018-09-18 00:00:00\",\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{\"fullname\":\"\",\"email\":\"\"},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+
     }
 
     @Test
     public void runTest() throws InterruptedException {
+
 
         Kebab kebab = dTUsersPage.getTable().getKebabOnTable("UNIMPORTANT", usersTableHeaderTitles.get(0), usersTableHeaderTitles.get(4));
         kebab.getClickable().click();

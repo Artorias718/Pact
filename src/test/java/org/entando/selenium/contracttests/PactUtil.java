@@ -11,6 +11,8 @@ public class PactUtil {
 
     public static final String MATCH_ANY_HTTP_VERB = "(GET|HEAD|POST|DELETE|TRACE|OPTIONS|PATCH|PUT\\,\\s){1,8}";
 
+    public static String LocalDate = java.time.LocalDate.now() + " 00:00:00";
+
 //    public static PactDslJsonBody toDslJsonBody(String json) {
 //        JSONObject jsonObject = new JSONObject(json);
 //        PactDslJsonBody dslJsonBody = new PactDslJsonBody();
@@ -61,7 +63,9 @@ public class PactUtil {
         }
     }
 
-    @State("with-data")
+    public static JSONObject toDslJsonBody(String json) {
+        return new JSONObject(json);
+    }
     public static PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder
                 .uponReceiving("The ProfileTypes OPTIONS Interaction")
@@ -77,8 +81,6 @@ public class PactUtil {
                 .matchQuery("page", "\\d+")
                 .matchQuery("pageSize", "\\d+");
         return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"name\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
-        //return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{}}");
-
     }
 
     public static PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
@@ -93,7 +95,7 @@ public class PactUtil {
                 .method("GET")
                 .matchQuery("page", "\\d+", "" + page)
                 .matchQuery("pageSize",  "\\d+", ""+pageSize);
-        return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-08-31 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":1,\"totalItems\":1,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+        return standardResponse(request, "{\"payload\":[{\"username\":\"admin\",\"registration\":\"2008-10-10 00:00:00\",\"lastLogin\":\"2018-10-21 00:00:00\",\"lastPasswordChange\":\"2018-09-18 00:00:00\",\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{\"fullname\":\"\",\"email\":\"\"},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1},{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-08-31 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":2,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
     public static PactDslResponse buildGetLanguages(PactDslResponse builder) {
@@ -147,10 +149,6 @@ public class PactUtil {
                 .willRespondWith()
                 .status(200)
                 .body(toDslJsonBody(json)));
-    }
-
-    public static JSONObject toDslJsonBody(String json) {
-        return new JSONObject(json);
     }
 
     public static PactDslResponse buildGetWidgets(PactDslResponse builder) {
@@ -244,12 +242,11 @@ public class PactUtil {
     public static PactDslResponse addStandardHeaders(PactDslResponse response) {
         response
                 //.matchHeader("Allow", MATCH_ANY_HTTP_VERB, "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH")
-                //.matchHeader("Access-Control-Allow-Methods",MATCH_ANY_HTTP_VERB, "GET, POST, PUT, DELETE, OPTIONS")
+                .matchHeader("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS", "GET, POST, PUT, DELETE, OPTIONS")
                 .matchHeader("Access-Control-Allow-Origin", "\\*","*")
                 .matchHeader("Access-Control-Max-Age", "3600", "3600")
                 .matchHeader("Connection", "keep-alive", "keep-alive")
                 .matchHeader("Access-Control-Allow-Headers", ".+", "Content-Type, Authorization");
-
         return response;
     }
 

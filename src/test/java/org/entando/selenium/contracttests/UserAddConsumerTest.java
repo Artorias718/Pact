@@ -29,14 +29,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import static au.com.dius.pact.consumer.ConsumerPactRunnerKt.runConsumerTest;
 import static org.entando.selenium.contracttests.PactUtil.*;
-import static java.lang.Thread.sleep;
 
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "UserAddProvider", port = "8080")
@@ -84,17 +78,18 @@ public class UserAddConsumerTest extends UsersTestBase {
         PactDslResponse postUserResponse = buildPostUser(builder);
         PactDslResponse getUsersResponse = buildGetUsers(postUserResponse,1,1);
         PactDslResponse getProfileTypesResponse = buildGetProfileTypes(getUsersResponse);
-        //PactDslResponse ActivityStreamUpdate = buildActivityStreamUpdate(getProfileTypesResponse);
         return getProfileTypesResponse.toPact();
     }
 
     private PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
+        String cane = "bau"; //\"username\":\""+cane+"\",
+
         PactDslRequestWithPath request = builder.uponReceiving("The User Query GET Interaction")
                 .path("/entando/api/users")
                 .method("GET")
                 .matchQuery("page", "\\d+", "" + page)
-                .matchQuery("pageSize",  "\\d+", ""+pageSize);
-        return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-10-20 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"inactive\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":2,\"totalItems\":2,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+                .matchQuery("pageSize",  "\\d+", "" + pageSize);
+        return standardResponse(request, "{\"payload\":[{\"username\":\"UNIMPORTANT\",\"registration\":\""+LocalDate+"\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"inactive\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":1,\"lastPage\":2,\"totalItems\":2,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
     private PactDslResponse buildPostUser(PactDslWithProvider builder) {
@@ -109,8 +104,7 @@ public class UserAddConsumerTest extends UsersTestBase {
                 .path("/entando/api/users/")
                 .method("POST")
                 .body("{\"username\": \"UNIMPORTANT\", \"password\": \"adminadmin\", \"passwordConfirm\": \"adminadmin\", \"profileType\": \"PFL\"}");;
-        return standardResponse(request, "{\"payload\":{\"username\":\"UNIMPORTANT\",\"registration\":\"2018-10-20 00:00:00\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"inactive\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1},\"errors\":[],\"metaData\":{}}");
-
+        return standardResponse(request, "{\"payload\":{\"username\":\"UNIMPORTANT\",\"registration\":\""+LocalDate+"\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"inactive\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1},\"errors\":[],\"metaData\":{}}");
     }
 
     private PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
@@ -135,12 +129,10 @@ public class UserAddConsumerTest extends UsersTestBase {
 
         dTUsersPage.getAddButton().click();
         Utils.waitUntilIsVisible(driver, dTUserAddPage.getPageTitle());
-
         dTUserAddPage.setUsernameField("UNIMPORTANT");
         dTUserAddPage.setPasswordField("adminadmin");
         dTUserAddPage.setPasswordConfirmField("adminadmin");
         dTUserAddPage.getProfileTypeSelect().selectByVisibleText("Default user profile");
-
         Assert.assertTrue(dTUserAddPage.getSaveButton().isEnabled());
         dTUserAddPage.getSaveButton().click();
         Utils.waitUntilIsDisappears(driver, dTUsersPage.spinnerTag);
