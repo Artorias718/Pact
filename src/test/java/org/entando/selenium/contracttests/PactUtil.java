@@ -66,6 +66,7 @@ public class PactUtil {
     public static JSONObject toDslJsonBody(String json) {
         return new JSONObject(json);
     }
+
     public static PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder
                 .uponReceiving("The ProfileTypes OPTIONS Interaction")
@@ -148,6 +149,27 @@ public class PactUtil {
         return addStandardHeaders(request
                 .willRespondWith()
                 .status(200)
+                .body(toDslJsonBody(json)));
+    }
+
+    public static PactDslResponse conflictResponse(PactDslRequestWithPath request, String json) {
+        return addStandardHeaders(request
+                .willRespondWith()
+                .status(409)
+                .body(toDslJsonBody(json)));
+    }
+
+    public static PactDslResponse notFoundResponse(PactDslRequestWithPath request, String json) {
+        return addStandardHeaders(request
+                .willRespondWith()
+                .status(404)
+                .body(toDslJsonBody(json)));
+    }
+
+    public static PactDslResponse badRequestResponse(PactDslRequestWithPath request, String json) {
+        return addStandardHeaders(request
+                .willRespondWith()
+                .status(400)
                 .body(toDslJsonBody(json)));
     }
 

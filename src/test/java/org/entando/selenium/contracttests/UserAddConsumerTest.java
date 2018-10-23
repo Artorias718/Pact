@@ -81,6 +81,13 @@ public class UserAddConsumerTest extends UsersTestBase {
         return getProfileTypesResponse.toPact();
     }
 
+    @Pact(provider = "UserAddProvider", consumer = "UserAddConsumer")
+    public RequestResponsePact createPact2(PactDslWithProvider builder) {
+        PactDslResponse postUserResponse = buildPostUser2(builder);
+        PactDslResponse getProfileTypesResponse = buildOnlyGetProfileTypes(postUserResponse);
+        return getProfileTypesResponse.toPact();
+    }
+
     private PactDslResponse buildGetUsers(PactDslResponse builder, int page, int pageSize) {
         String cane = "bau"; //\"username\":\""+cane+"\",
 
@@ -93,18 +100,27 @@ public class UserAddConsumerTest extends UsersTestBase {
     }
 
     private PactDslResponse buildPostUser(PactDslWithProvider builder) {
-        PactDslRequestWithPath optionsRequest = builder
+        PactDslRequestWithPath optionsRequest = builder.given("there is no user exists with the username UNIMPORTANT")
                 .uponReceiving("The User Add OPTIONS Interaction")
                 .path("/entando/api/users/")
                 .method("OPTIONS");
         PactDslResponse optionsResponse = optionsResponse(optionsRequest);
         PactDslRequestWithPath request = optionsResponse
                 .uponReceiving("The User Add POST Interaction")
-                //TODO add the expectation for the incoming data
                 .path("/entando/api/users/")
                 .method("POST")
                 .body("{\"username\": \"UNIMPORTANT\", \"password\": \"adminadmin\", \"passwordConfirm\": \"adminadmin\", \"profileType\": \"PFL\"}");
         return standardResponse(request, "{\"payload\":{\"username\":\"UNIMPORTANT\",\"registration\":\""+LocalDate+"\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"inactive\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1},\"errors\":[],\"metaData\":{}}");
+    }
+
+    private PactDslResponse buildPostUser2(PactDslWithProvider builder) {
+        PactDslRequestWithPath  request = builder.given("a user exists with the username UNIMPORTANT")
+                .uponReceiving("The User Add POST Interaction")
+                //TODO add the expectation for the incoming data
+                .path("/entando/api/users/")
+                .method("POST")
+                .body("{\"username\": \"UNIMPORTANT\", \"password\": \"adminadmin\", \"passwordConfirm\": \"adminadmin\", \"profileType\": \"PFL\"}");
+            return conflictResponse(request, "{payload: [], errors: [{code: \"1\", message: \"The user 'UNIMPORTANT' already exists\"}], metaData: {}}");
     }
 
     private PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
@@ -124,9 +140,17 @@ public class UserAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
-    @Test
-    public void runTest() throws InterruptedException {
+    private PactDslResponse buildOnlyGetProfileTypes(PactDslResponse builder) {
+        PactDslRequestWithPath request = builder
+                .uponReceiving("The ProfileTypes GET Interaction")
+                .path("/entando/api/profileTypes")
+                .method("GET")
+                .matchQuery("page", "1")
+                .matchQuery("pageSize", "\\d+","" + 10);
+        return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+    }
 
+    private void test(){
         dTUsersPage.getAddButton().click();
         Utils.waitUntilIsVisible(driver, dTUserAddPage.getPageTitle());
         dTUserAddPage.setUsernameField("UNIMPORTANT");
@@ -136,6 +160,18 @@ public class UserAddConsumerTest extends UsersTestBase {
         Assert.assertTrue(dTUserAddPage.getSaveButton().isEnabled());
         dTUserAddPage.getSaveButton().click();
         Utils.waitUntilIsDisappears(driver, dTUsersPage.spinnerTag);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "createPact2")
+    public void runTest() throws InterruptedException {
+        test();
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "createPact")
+    public void runTest2() throws InterruptedException {
+        test();
     }
 }
 

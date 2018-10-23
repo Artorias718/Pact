@@ -11,16 +11,11 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpOptions;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.*;
 import org.apache.http.cookie.SetCookie;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.entando.selenium.pages.DTUserProfileTypePage;
-import org.entando.selenium.tests.DTUserProfileTypeAddTest;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -93,7 +88,6 @@ public class UserEditProviderTest {
         CloseableHttpResponse response2 = HttpClients.createDefault().execute(postProfileType);
         System.out.println("\n" + response2 + "\n");
 
-
     }
 
     @TestTemplate
@@ -110,4 +104,51 @@ public class UserEditProviderTest {
     void before(PactVerificationContext context) throws MalformedURLException {
         context.setTarget(HttpTestTarget.fromUrl(new URL("http://localhost:8080")));
     }
+
+    public static void POST() throws IOException{
+
+        HttpPost postProfileType = new HttpPost( "http://localhost:8080/entando/api/users");
+        String postData = "{\"username\": \"UNIMPORTANT\", \"password\": \"adminadmin\", \"passwordConfirm\": \"adminadmin\", \"profileType\": \"PFL\"}";
+        postProfileType.setEntity(new StringEntity(postData));
+        postProfileType.addHeader("Authorization", "Bearer " + accesToken);
+        postProfileType.addHeader("Origin", "http://localhost:5000");
+        postProfileType.addHeader("Accept-Encoding","gzip, deflate, br");
+        postProfileType.addHeader("Host","localhost:8080");
+        postProfileType.addHeader("Accept-Language","en-GB,en-US;q=0.9,en;q=0.8");
+        postProfileType.addHeader("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
+        postProfileType.addHeader("Referer","http://localhost:5000/");
+        postProfileType.addHeader("Content-Type", "application/json");
+        postProfileType.addHeader("Connection", "keep-alive");
+        postProfileType.addHeader("Accept", "*/*");
+        CloseableHttpResponse response2 = HttpClients.createDefault().execute(postProfileType);
+        System.out.println("\n" + response2 + "\n");
+    }
+
+    public static void DELETE() throws IOException{
+
+        HttpDelete postProfileType = new HttpDelete( "http://localhost:8080/entando/api/users/UNIMPORTANT");
+        postProfileType.addHeader("Authorization", "Bearer " + accesToken);
+        postProfileType.addHeader("Origin", "http://localhost:5000");
+        postProfileType.addHeader("Accept-Encoding","gzip, deflate, br");
+        postProfileType.addHeader("Host","localhost:8080");
+        postProfileType.addHeader("Accept-Language","en-GB,en-US;q=0.9,en;q=0.8");
+        postProfileType.addHeader("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
+        postProfileType.addHeader("Referer","http://localhost:5000/");
+        postProfileType.addHeader("Content-Type", "application/json");
+        postProfileType.addHeader("Connection", "keep-alive");
+        postProfileType.addHeader("Accept", "*/*");
+        CloseableHttpResponse response2 = HttpClients.createDefault().execute(postProfileType);
+        System.out.println("\n" +"DELETING 000000000000000"+ response2 + "\n");
+    }
+
+    @State("the user to put exists")
+    public static void toFirstState() throws IOException {
+
+    }
+
+    @State("there is not the user to put")
+    public void toSecondState() throws IOException{
+        //DELETE();
+    }
+
 }

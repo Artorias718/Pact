@@ -17,6 +17,7 @@ import au.com.dius.pact.consumer.PactVerificationResult;
 import au.com.dius.pact.consumer.dsl.PactDslRequestWithPath;
 import au.com.dius.pact.consumer.dsl.PactDslResponse;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
+import au.com.dius.pact.consumer.dsl.PactDslWithState;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.MockProviderConfig;
@@ -29,6 +30,8 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Sleeper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,11 +57,11 @@ public class UserEditConsumerTest extends UsersTestBase {
     public DTUserEditPage dTUserEditPage;
 
     @BeforeAll
-    public void setupSessionAndNavigateToUserManagement (){
+    public void setupSessionAndNavigateToUserManagement() {
         PactDslWithProvider builder = ConsumerPactBuilder.consumer("LoginConsumer").hasPactWith("LoginProvider");
         PactDslResponse accessTokenResponse = buildGetAccessToken(builder);
-        PactDslResponse getUsersResponse = PactUtil.buildGetUsers(accessTokenResponse,1,1);
-        getUsersResponse = PactUtil.buildGetUsers(getUsersResponse,1,10);
+        PactDslResponse getUsersResponse = PactUtil.buildGetUsers(accessTokenResponse, 1, 1);
+        getUsersResponse = PactUtil.buildGetUsers(getUsersResponse, 1, 10);
         PactDslResponse getPagesResponse = buildGetPages(getUsersResponse);
         PactDslResponse getPageStatusResponse = buildGetPageStatus(getPagesResponse);
         PactDslResponse getWidgetsResponse = buildGetWidgets(getPageStatusResponse);
@@ -75,19 +78,25 @@ public class UserEditConsumerTest extends UsersTestBase {
 
     @Pact(provider = "UserEditProvider", consumer = "UserEditConsumer")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
-        PactDslResponse getUsersResponse = buildGetUsers(builder,1,10);
+        PactDslResponse getUsersResponse = buildGetUsers(builder, 1, 10);
         PactDslResponse getUserToPutResponse = buildGetUserToPut(getUsersResponse);
         PactDslResponse putUserResponse = buildPutUser(getUserToPutResponse);
         PactDslResponse getProfileTypesResponse = buildGetProfileTypes(putUserResponse);
         return getProfileTypesResponse.toPact();
     }
 
-    private PactDslResponse buildPutUser(PactDslResponse builder ){
+    @Pact(provider = "UserEditProvider", consumer = "UserEditConsumer")
+    public RequestResponsePact createPact2(PactDslWithProvider builder) {
+        PactDslResponse getUserToPutResponse = buildGetUserToPut2(builder);
+        return getUserToPutResponse.toPact();
+    }
+
+    private PactDslResponse buildPutUser(PactDslResponse builder) {
         PactDslRequestWithPath request = builder.uponReceiving("The User PUT Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
-                .method("PUT")//body + ricco
-                .body("{\"username\":\"UNIMPORTANT\",\"registration\":\""+LocalDate+"\",\"lastLogin\":null,\"lastPasswordChange\":null,\"password\":\"password\",\"passwordConfirm\":\"password\"}");
-        return standardResponse(request, "{\"payload\":{\"lastPasswordChange\": \""+LocalDate+"\",\"lastLogin\": null,\"credentialsNotExpired\": true,\"username\": \"UNIMPORTANT\",\"accountNotExpired\": true,\"profileType\": null,\"status\": \"inactive\",\"maxMonthsSinceLastPasswordChange\": -1,\"maxMonthsSinceLastAccess\": -1,\"profileAttributes\": {},\"registration\": \""+LocalDate+"\"},\"errors\":[],\"metaData\": {}}");
+                .method("PUT")
+                .body("{\"username\":\"UNIMPORTANT\",\"registration\":\"" + LocalDate + "\",\"lastLogin\":null,\"lastPasswordChange\":null,\"password\":\"password\",\"passwordConfirm\":\"password\"}");
+        return standardResponse(request, "{\"payload\":{\"lastPasswordChange\": \"" + LocalDate + "\",\"lastLogin\": null,\"credentialsNotExpired\": true,\"username\": \"UNIMPORTANT\",\"accountNotExpired\": true,\"profileType\": null,\"status\": \"inactive\",\"maxMonthsSinceLastPasswordChange\": -1,\"maxMonthsSinceLastAccess\": -1,\"profileAttributes\": {},\"registration\": \"" + LocalDate + "\"},\"errors\":[],\"metaData\": {}}");
     }
 
     private PactDslResponse buildGetUsers(PactDslWithProvider builder, int page, int pageSize) {
@@ -96,20 +105,30 @@ public class UserEditConsumerTest extends UsersTestBase {
                 .path("/entando/api/users")
                 .method("GET")
                 .matchQuery("page", "\\d+", "" + page)
-                .matchQuery("pageSize",  "\\d+", ""+pageSize);
-        return standardResponse(request, "{\"payload\":[{\"lastPasswordChange\":null,\"lastLogin\": null,\"credentialsNotExpired\": true,\"username\": \"UNIMPORTANT\",\"accountNotExpired\": true,\"profileType\": null,\"status\": \"inactive\",\"maxMonthsSinceLastPasswordChange\": -1,\"maxMonthsSinceLastAccess\": -1,\"profileAttributes\": {},\"registration\": \""+LocalDate+"\"},{\"username\":\"admin\",\"registration\":\"2008-10-10 00:00:00\",\"lastLogin\":\""+LocalDate+"\",\"lastPasswordChange\":\"2018-09-18 00:00:00\",\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{\"fullname\":\"\",\"email\":\"\"},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":2,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
+                .matchQuery("pageSize", "\\d+", "" + pageSize);
+        return standardResponse(request, "{\"payload\":[{\"lastPasswordChange\":null,\"lastLogin\": null,\"credentialsNotExpired\": true,\"username\": \"UNIMPORTANT\",\"accountNotExpired\": true,\"profileType\": null,\"status\": \"inactive\",\"maxMonthsSinceLastPasswordChange\": -1,\"maxMonthsSinceLastAccess\": -1,\"profileAttributes\": {},\"registration\": \"" + LocalDate + "\"},{\"username\":\"admin\",\"registration\":\"2008-10-10 00:00:00\",\"lastLogin\":\"" + LocalDate + "\",\"lastPasswordChange\":\"2018-09-18 00:00:00\",\"status\":\"active\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{\"fullname\":\"\",\"email\":\"\"},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":2,\"sort\":\"username\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
     private PactDslResponse buildGetUserToPut(PactDslResponse builder) {
-        PactDslRequestWithPath optionsRequest = builder.uponReceiving("The get User to put OPTIONS Interaction")
+        PactDslRequestWithPath request = builder.given("the user to put exists")
+                .uponReceiving("The get User to put GET request")
+                .path("/entando/api/users/UNIMPORTANT")
+                .method("GET");
+        return standardResponse(request, "{\"payload\":{\"lastLogin\":null,\"registration\":\"" + LocalDate + "\",\"lastPasswordChange\":null,\"username\":\"UNIMPORTANT\"}}");
+    }
+
+    private PactDslResponse buildGetUserToPut2(PactDslWithProvider builder) {
+        PactDslRequestWithPath optionsRequest = builder.given("there is not the user to put")
+                .uponReceiving("The get User to put OPTIONS Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
                 .method("OPTIONS")
                 .headers("Access-control-request-method", "GET");
         PactDslResponse optionsResponse = optionsResponse(optionsRequest);
-        PactDslRequestWithPath request = optionsResponse.uponReceiving("The get User to put GET request")
+        PactDslRequestWithPath request = optionsResponse
+                .uponReceiving("The get User to put GET request")
                 .path("/entando/api/users/UNIMPORTANT")
                 .method("GET");
-        return standardResponse(request, "{\"payload\":{\"lastLogin\":null,\"registration\":\""+LocalDate+"\",\"lastPasswordChange\":null,\"username\":\"UNIMPORTANT\"}}");
+        return notFoundResponse(request, "{\"payload\":[],\"errors\":[{\"code\":\"1\",\"message\":\"a user with UNIMPORTANT code could not be found\"}],\"metaData\":{}}");
     }
 
     private PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
@@ -117,27 +136,43 @@ public class UserEditConsumerTest extends UsersTestBase {
                 .uponReceiving("The ProfileTypes GET Interaction")
                 .path("/entando/api/profileTypes")
                 .method("GET")
-                .matchQuery("page", "\\d+","1")
-                .matchQuery("pageSize", "\\d+","10");
+                .matchQuery("page", "\\d+", "1")
+                .matchQuery("pageSize", "\\d+", "10");
         return standardResponse(request, "{\"payload\":[{\"code\":\"PFL\",\"name\":\"Default user profile\",\"status\":\"0\"}],\"errors\":[],\"metaData\":{\"page\":1,\"pageSize\":10,\"lastPage\":1,\"totalItems\":1,\"sort\":\"code\",\"direction\":\"ASC\",\"filters\":[],\"additionalParams\":{}}}");
     }
 
     @Test
+    @PactTestFor(pactMethod = "createPact")
     public void runTest() throws InterruptedException {
 
+        dTDashboardPage.SelectSecondOrderLinkWithSleep("User Management", "Users");
         String pass = "password";
         Kebab kebab = dTUsersPage.getTable().getKebabOnTable("UNIMPORTANT", usersTableHeaderTitles.get(0), usersTableHeaderTitles.get(4));
         kebab.getClickable().click();
         Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
-        sleep(200);
         kebab.getAction("Edit").click();
         dTUserEditPage.setPassword("");
         dTUserEditPage.setPassword(pass);
         dTUserEditPage.setPasswordConfirm(pass);
         dTUserEditPage.getResetSwitch().setOff();
         dTUserEditPage.getSaveButton().click();
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "createPact2")
+    public void runTest2() throws InterruptedException {
+
+        String pass = "password";
+        Kebab kebab = dTUsersPage.getTable().getKebabOnTable("UNIMPORTANT", usersTableHeaderTitles.get(0), usersTableHeaderTitles.get(4));
+        kebab.getClickable().click();
+        Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
+        kebab.getAction("Edit").click();
+        sleep(200);
 
     }
+
 }
+
+
 
 
