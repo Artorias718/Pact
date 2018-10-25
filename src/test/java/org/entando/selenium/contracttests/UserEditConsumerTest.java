@@ -17,7 +17,6 @@ import au.com.dius.pact.consumer.PactVerificationResult;
 import au.com.dius.pact.consumer.dsl.PactDslRequestWithPath;
 import au.com.dius.pact.consumer.dsl.PactDslResponse;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
-import au.com.dius.pact.consumer.dsl.PactDslWithState;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.MockProviderConfig;
@@ -26,18 +25,10 @@ import org.entando.selenium.pages.*;
 import org.entando.selenium.utils.UsersTestBase;
 import org.entando.selenium.utils.Utils;
 import org.entando.selenium.utils.pageParts.Kebab;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.Sleeper;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static au.com.dius.pact.consumer.ConsumerPactRunnerKt.runConsumerTest;
 import static java.lang.Thread.sleep;
@@ -79,15 +70,15 @@ public class UserEditConsumerTest extends UsersTestBase {
     @Pact(provider = "UserEditProvider", consumer = "UserEditConsumer")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
         PactDslResponse getUsersResponse = buildGetUsers(builder, 1, 10);
-        PactDslResponse getUserToPutResponse = buildGetUserToPut(getUsersResponse);
-        PactDslResponse putUserResponse = buildPutUser(getUserToPutResponse);
-        PactDslResponse getProfileTypesResponse = buildGetProfileTypes(putUserResponse);
-        return getProfileTypesResponse.toPact();
+        PactDslResponse getProfileTypesResponse = buildGetProfileTypes(getUsersResponse);
+        PactDslResponse putUserResponse = buildPutUser(getProfileTypesResponse);
+        PactDslResponse getUserToPutResponse = buildGetUserToPut(putUserResponse);
+        return getUserToPutResponse.toPact();
     }
 
     @Pact(provider = "UserEditProvider", consumer = "UserEditConsumer")
-    public RequestResponsePact createPact2(PactDslWithProvider builder) {
-        PactDslResponse getUserToPutResponse = buildGetUserToPut2(builder);
+    public RequestResponsePact createPactFor404(PactDslWithProvider builder) {
+        PactDslResponse getUserToPutResponse = buildGetUserToPutFor404(builder);
         return getUserToPutResponse.toPact();
     }
 
@@ -110,15 +101,16 @@ public class UserEditConsumerTest extends UsersTestBase {
     }
 
     private PactDslResponse buildGetUserToPut(PactDslResponse builder) {
-        PactDslRequestWithPath request = builder.given("the user to put exists")
+        PactDslRequestWithPath request = builder
                 .uponReceiving("The get User to put GET request")
                 .path("/entando/api/users/UNIMPORTANT")
                 .method("GET");
         return standardResponse(request, "{\"payload\":{\"lastLogin\":null,\"registration\":\"" + LocalDate + "\",\"lastPasswordChange\":null,\"username\":\"UNIMPORTANT\"}}");
     }
 
-    private PactDslResponse buildGetUserToPut2(PactDslWithProvider builder) {
-        PactDslRequestWithPath optionsRequest = builder.given("there is not the user to put")
+    private PactDslResponse buildGetUserToPutFor404(PactDslWithProvider builder) {
+        PactDslRequestWithPath optionsRequest = builder
+                .given("there is no user to put")
                 .uponReceiving("The get User to put OPTIONS Interaction")
                 .path("/entando/api/users/UNIMPORTANT")
                 .method("OPTIONS")
@@ -133,6 +125,7 @@ public class UserEditConsumerTest extends UsersTestBase {
 
     private PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
         PactDslRequestWithPath request = builder
+                .given("a user to put exists")
                 .uponReceiving("The ProfileTypes GET Interaction")
                 .path("/entando/api/profileTypes")
                 .method("GET")
@@ -144,22 +137,21 @@ public class UserEditConsumerTest extends UsersTestBase {
     @Test
     @PactTestFor(pactMethod = "createPact")
     public void runTest() throws InterruptedException {
-
         dTDashboardPage.SelectSecondOrderLinkWithSleep("User Management", "Users");
-        String pass = "password";
-        Kebab kebab = dTUsersPage.getTable().getKebabOnTable("UNIMPORTANT", usersTableHeaderTitles.get(0), usersTableHeaderTitles.get(4));
+        Kebab kebab = dTUsersPage.getTable().getKebabOnTable(
+                "UNIMPORTANT", usersTableHeaderTitles.get(0), usersTableHeaderTitles.get(4));
         kebab.getClickable().click();
         Utils.waitUntilIsVisible(driver, kebab.getAllActionsMenu());
         kebab.getAction("Edit").click();
         dTUserEditPage.setPassword("");
-        dTUserEditPage.setPassword(pass);
-        dTUserEditPage.setPasswordConfirm(pass);
+        dTUserEditPage.setPassword("password");
+        dTUserEditPage.setPasswordConfirm("password");
         dTUserEditPage.getResetSwitch().setOff();
         dTUserEditPage.getSaveButton().click();
     }
 
     @Test
-    @PactTestFor(pactMethod = "createPact2")
+    @PactTestFor(pactMethod = "createPactFor404")
     public void runTest2() throws InterruptedException {
 
         String pass = "password";
@@ -170,9 +162,5 @@ public class UserEditConsumerTest extends UsersTestBase {
         sleep(200);
 
     }
-
 }
-
-
-
 

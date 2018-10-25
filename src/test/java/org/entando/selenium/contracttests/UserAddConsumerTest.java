@@ -82,8 +82,8 @@ public class UserAddConsumerTest extends UsersTestBase {
     }
 
     @Pact(provider = "UserAddProvider", consumer = "UserAddConsumer")
-    public RequestResponsePact createPact2(PactDslWithProvider builder) {
-        PactDslResponse postUserResponse = buildPostUser2(builder);
+    public RequestResponsePact createPactFor409(PactDslWithProvider builder) {
+        PactDslResponse postUserResponse = buildPostUserFor409(builder);
         PactDslResponse getProfileTypesResponse = buildOnlyGetProfileTypes(postUserResponse);
         return getProfileTypesResponse.toPact();
     }
@@ -100,7 +100,7 @@ public class UserAddConsumerTest extends UsersTestBase {
     }
 
     private PactDslResponse buildPostUser(PactDslWithProvider builder) {
-        PactDslRequestWithPath optionsRequest = builder.given("there is no user exists with the username UNIMPORTANT")
+        PactDslRequestWithPath optionsRequest = builder
                 .uponReceiving("The User Add OPTIONS Interaction")
                 .path("/entando/api/users/")
                 .method("OPTIONS");
@@ -113,8 +113,8 @@ public class UserAddConsumerTest extends UsersTestBase {
         return standardResponse(request, "{\"payload\":{\"username\":\"UNIMPORTANT\",\"registration\":\""+LocalDate+"\",\"lastLogin\":null,\"lastPasswordChange\":null,\"status\":\"inactive\",\"accountNotExpired\":true,\"credentialsNotExpired\":true,\"profileType\":null,\"profileAttributes\":{},\"maxMonthsSinceLastAccess\":-1,\"maxMonthsSinceLastPasswordChange\":-1},\"errors\":[],\"metaData\":{}}");
     }
 
-    private PactDslResponse buildPostUser2(PactDslWithProvider builder) {
-        PactDslRequestWithPath  request = builder.given("a user exists with the username UNIMPORTANT")
+    private PactDslResponse buildPostUserFor409(PactDslWithProvider builder) {
+        PactDslRequestWithPath  request = builder
                 .uponReceiving("The User Add POST Interaction")
                 //TODO add the expectation for the incoming data
                 .path("/entando/api/users/")
@@ -125,6 +125,7 @@ public class UserAddConsumerTest extends UsersTestBase {
 
     private PactDslResponse buildGetProfileTypes(PactDslResponse builder) {
         PactDslRequestWithPath optionsRequest = builder
+                .given("there is no user exists with the username UNIMPORTANT")
                 .uponReceiving("The ProfileTypes OPTIONS Interaction")
                 .path("/entando/api/profileTypes")
                 .method("OPTIONS")
@@ -142,6 +143,7 @@ public class UserAddConsumerTest extends UsersTestBase {
 
     private PactDslResponse buildOnlyGetProfileTypes(PactDslResponse builder) {
         PactDslRequestWithPath request = builder
+                .given("a user exists with the username UNIMPORTANT")
                 .uponReceiving("The ProfileTypes GET Interaction")
                 .path("/entando/api/profileTypes")
                 .method("GET")
@@ -163,7 +165,7 @@ public class UserAddConsumerTest extends UsersTestBase {
     }
 
     @Test
-    @PactTestFor(pactMethod = "createPact2")
+    @PactTestFor(pactMethod = "createPactFor409")
     public void runTest() throws InterruptedException {
         test();
     }

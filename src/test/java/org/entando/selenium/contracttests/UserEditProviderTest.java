@@ -1,7 +1,5 @@
 package org.entando.selenium.contracttests;
 
-import au.com.dius.pact.consumer.dsl.PactDslResponse;
-import au.com.dius.pact.provider.PactVerifyProvider;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
 import au.com.dius.pact.provider.junit.loader.PactFolder;
@@ -9,10 +7,8 @@ import au.com.dius.pact.provider.junit5.HttpTestTarget;
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
 import org.apache.http.*;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.*;
-import org.apache.http.cookie.SetCookie;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -21,22 +17,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.Request;
-import unfiltered.request.POST;
-
-import javax.swing.text.html.parser.Entity;
-import java.beans.Expression;
-import java.util.HashMap;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static org.entando.selenium.contracttests.PactUtil.buildGetProfileTypes;
 
 @Provider("UserEditProvider")
 @PactFolder("target/pacts")
@@ -70,24 +56,7 @@ public class UserEditProviderTest {
         accesToken=new JSONObject(new String(outstream.toByteArray())).getString("access_token");
         sessionId=response.getFirstHeader("Set-Cookie");
 
-        HttpPost postProfileType = new HttpPost( "http://localhost:8080/entando/api/users");
-
-        String postData = "{\"username\": \"UNIMPORTANT\", \"password\": \"adminadmin\", \"passwordConfirm\": \"adminadmin\", \"profileType\": \"PFL\"}";
-        postProfileType.setEntity(new StringEntity(postData));
-        postProfileType.addHeader("Authorization", "Bearer " + accesToken);
-        postProfileType.addHeader("Origin", "http://localhost:5000");
-        postProfileType.addHeader("Accept-Encoding","gzip, deflate, br");
-        postProfileType.addHeader("Host","localhost:8080");
-        postProfileType.addHeader("Accept-Language","en-GB,en-US;q=0.9,en;q=0.8");
-        postProfileType.addHeader("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
-        postProfileType.addHeader("Referer","http://localhost:5000/");
-        postProfileType.addHeader("Content-Type", "application/json");
-        postProfileType.addHeader("Connection", "keep-alive");
-        postProfileType.addHeader("Accept", "*/*");
-
-        CloseableHttpResponse response2 = HttpClients.createDefault().execute(postProfileType);
-        System.out.println("\n" + response2 + "\n");
-
+        postUser();
     }
 
     @TestTemplate
@@ -105,7 +74,7 @@ public class UserEditProviderTest {
         context.setTarget(HttpTestTarget.fromUrl(new URL("http://localhost:8080")));
     }
 
-    public static void POST() throws IOException{
+    public static void postUser() throws IOException{
 
         HttpPost postProfileType = new HttpPost( "http://localhost:8080/entando/api/users");
         String postData = "{\"username\": \"UNIMPORTANT\", \"password\": \"adminadmin\", \"passwordConfirm\": \"adminadmin\", \"profileType\": \"PFL\"}";
@@ -124,7 +93,7 @@ public class UserEditProviderTest {
         System.out.println("\n" + response2 + "\n");
     }
 
-    public static void DELETE() throws IOException{
+    public static void DeleteUser() throws IOException{
 
         HttpDelete postProfileType = new HttpDelete( "http://localhost:8080/entando/api/users/UNIMPORTANT");
         postProfileType.addHeader("Authorization", "Bearer " + accesToken);
@@ -141,14 +110,15 @@ public class UserEditProviderTest {
         System.out.println("\n" +"DELETING 000000000000000"+ response2 + "\n");
     }
 
-    @State("the user to put exists")
+    @State("a user to put exists")
     public static void toFirstState() throws IOException {
 
     }
 
-    @State("there is not the user to put")
+    @State("there is no user to put")
     public void toSecondState() throws IOException{
-        //DELETE();
+        DeleteUser();
     }
+
 
 }
