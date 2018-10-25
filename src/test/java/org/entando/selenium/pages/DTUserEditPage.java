@@ -50,8 +50,10 @@ public class DTUserEditPage extends PageObject {
     
     @FindBy(css = "button.pull-right")
     private WebElement saveButton;
-    
-    
+
+
+    //public WebElement getSaveButton(){return saveButton;}
+
     public void setPassword(String password) {
         this.password.clear();
         this.password.sendKeys(password);
